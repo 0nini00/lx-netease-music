@@ -1,0 +1,10 @@
+rootProject.name = 'com.lxnetease.music.mobile'
+
+// React Native Gradle plugin (composite build)
+includeBuild('../node_modules/@react-native/gradle-plugin')
+
+// React Native autolinking (native modules)
+apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle")
+applyNativeModulesSettingsGradle(settings)
+
+include ':app'
