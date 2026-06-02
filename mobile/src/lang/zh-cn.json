@@ -235,6 +235,8 @@
   "search_type_music": "歌曲",
   "search_type_songlist": "歌单",
   "search_type_singer": "歌手",
+  "search_failed": "搜索失败",
+  "no_data": "暂无数据",
   "search_type_album": "专辑",
   "setting__other_dislike_list": "「不喜欢的歌曲」规则",
   "setting__other_dislike_list_label": "规则数量：{num}",

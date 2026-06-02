@@ -9,7 +9,7 @@ import { useTheme } from '@/store/theme/hook'
 import { getSearchSetting } from '@/utils/data'
 import { BorderWidths } from '@/theme'
 
-const SEARCH_TYPE_LIST = ['music', 'songlist'] as const
+const SEARCH_TYPE_LIST = ['music', 'songlist', 'singer'] as const
 
 export default () => {
   const t = useI18n()
@@ -62,29 +62,18 @@ const styles = createStyle({
     height: '100%',
     flexGrow: 0,
     flexShrink: 1,
-    // paddingLeft: 5,
-    // paddingRight: 5,
-    // backgroundColor: 'rgba(0,0,0,0.1)',
   },
   button: {
-    // height: 38,
-    // lineHeight: 38,
     justifyContent: 'center',
     paddingLeft: 8,
     paddingRight: 8,
-    // width: 80,
-    // backgroundColor: 'rgba(0,0,0,0.1)',
   },
   buttonText: {
-    // height: 38,
-    // lineHeight: 38,
     textAlign: 'center',
     paddingLeft: 2,
     paddingRight: 2,
-    // paddingTop: 10,
     paddingTop: 3,
     paddingBottom: 3,
     borderBottomWidth: BorderWidths.normal3,
-    // width: 80,
   },
 })

@@ -6,6 +6,7 @@ import pic from './pic'
 import lyric from './lyric'
 import hotSearch from './hotSearch'
 import comment from './comment'
+import singer from './singer'
 import {resolveQualityAlias} from "@/utils/musicSdk/utils";
 // import tipSearch from './tipSearch'
 
@@ -14,6 +15,7 @@ const kg = {
   leaderboard,
   songList,
   musicSearch,
+  singer,
   hotSearch,
   comment,
   getMusicUrl(songInfo, type) {

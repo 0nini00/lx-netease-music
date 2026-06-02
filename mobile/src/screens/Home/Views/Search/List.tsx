@@ -5,6 +5,7 @@ import type { Source as SongListSource } from '@/store/search/songlist/state'
 import MusicList, { type MusicListType } from './MusicList'
 import BlankView, { type BlankViewType } from './BlankView'
 import SonglistList from './SonglistList'
+import SingerList, { type SingerListType } from './SingerList'
 
 interface ListProps {
   onSearch: (keyword: string) => void
@@ -33,7 +34,7 @@ export default forwardRef<ListType, ListProps>(({ onSearch, onOpenDetail }, ref)
           setShowListView(false)
           setListType(type)
           requestAnimationFrame(() => {
-            listRef.current?.loadList(text, source)
+            listRef.current?.loadList(text, source as any)
           })
         } else {
           setShowListView(true)
@@ -50,6 +51,8 @@ export default forwardRef<ListType, ListProps>(({ onSearch, onOpenDetail }, ref)
     switch (listType) {
       case 'songlist':
         return <SonglistList ref={listRef} onOpenDetail={onOpenDetail} />
+      case 'singer':
+        return <SingerList ref={listRef as any} />
       case 'music':
       default:
         return <MusicList ref={listRef} />
