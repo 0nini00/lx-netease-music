@@ -603,5 +603,15 @@
   "album_detail": "专辑详情",
   "nav_my_playlist": "我的歌单",
   "exit_app_tip_double_press": "再按一次退出应用",
-  "setting_basic_nav_menu": "菜单显示设置"
+  "setting_basic_nav_menu": "菜单显示设置",
+  "sleep_timer": "定时关闭",
+  "sleep_timer_started": "定时关闭已开启",
+  "sleep_timer_stopped": "定时关闭已取消",
+  "sleep_timer_ended": "定时关闭结束",
+  "sleep_timer_after_track": "播完当前歌曲后关闭",
+  "sleep_timer_stop": "取消定时关闭",
+  "minute": "分钟",
+  "local_music": "本地音乐",
+  "local_music_scan": "扫描本地音乐",
+  "local_music_no_files": "未找到本地音乐文件"
 }

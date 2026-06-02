@@ -1,14 +1,10 @@
-export type SearchType = 'music' | 'songlist' | 'singer'
+export type SearchType = 'music' | 'songlist' | 'singer' | 'album'
 
 export interface InitState {
   temp_source: 'kw'
   searchType: SearchType
   searchText: string
-  tipListInfo: {
-    text: string
-    source: 'kw'
-    list: string[]
-  }
+  tipListInfo: { text: string; source: 'kw'; list: string[] }
   historyList: string[]
 }
 
@@ -16,11 +12,7 @@ const state: InitState = {
   temp_source: 'kw',
   searchType: 'music',
   searchText: '',
-  tipListInfo: {
-    text: '',
-    source: 'kw',
-    list: [],
-  },
+  tipListInfo: { text: '', source: 'kw', list: [] },
   historyList: [],
 }
 

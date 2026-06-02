@@ -599,5 +599,15 @@
   "exit_app_tip_double_press": "Press back again to exit",
   "setting_basic_nav_menu": "Menu Display Settings",
   "search_failed": "Search failed",
-  "no_data": "No data"
+  "no_data": "No data",
+  "sleep_timer": "Sleep Timer",
+  "sleep_timer_started": "Sleep timer started",
+  "sleep_timer_stopped": "Sleep timer stopped",
+  "sleep_timer_ended": "Sleep timer ended",
+  "sleep_timer_after_track": "Stop after current track",
+  "sleep_timer_stop": "Stop sleep timer",
+  "minute": "min",
+  "local_music": "Local Music",
+  "local_music_scan": "Scan Local Music",
+  "local_music_no_files": "No local music files found"
 }
