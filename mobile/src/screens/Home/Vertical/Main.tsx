@@ -4,6 +4,7 @@ import Mylist from '../Views/Mylist'
 import Leaderboard from '../Views/Leaderboard'
 import Setting from '../Views/Setting'
 import DailyRec from '../Views/DailyRec'
+import SearchPage from '../Views/Search'
 import commonState, { type InitState as CommonState } from '@/store/common/state'
 
 const Main = () => {
@@ -33,6 +34,8 @@ const Main = () => {
         return <Mylist />
       case 'nav_setting':
         return <Setting />
+      case 'nav_search':
+        return <SearchPage />
       default:
         return <SongList />
     }
