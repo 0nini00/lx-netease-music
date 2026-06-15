@@ -67,9 +67,7 @@ declare global {
     emit: (event: string, ...args: any[]) => void;
     triggerSearch: (text: string) => void;
     'wy-cookie-set': (cookie: string) => void
-    'yt-cookie-set': (cookie: string) => void
     showWebLogin: () => void
-    showYouTubeLogin: () => void
   }
   var list_event: ListEventTypes
   var dislike_event: DislikeEventTypes

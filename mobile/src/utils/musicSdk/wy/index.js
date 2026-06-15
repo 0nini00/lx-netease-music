@@ -8,13 +8,15 @@ import hotSearch from './hotSearch'
 import comment from './comment'
 import dailyRec from './dailyRec'
 import * as apiCookie from './api-cookie'
-// import tipSearch from './tipSearch'
+import tipSearch from './tipSearch'
+
 import artist from './artist'
+
 import album from './album'
 import {resolveQualityAlias} from "@/utils/musicSdk/utils";
 
 const wy = {
-  // tipSearch,
+  tipSearch,
   leaderboard,
   musicSearch,
   songList,

@@ -36,7 +36,7 @@ const Component = <S extends Sources>(
 ) => {
   const sourceNameType = useSettingValue('common.sourceNameType')
   const [list, setList] = useState([] as unknown as S)
-  const [source, setSource] = useState<S[number]>('kw')
+  const [source, setSource] = useState<S[number]>('kg')
   const t = useI18n()
 
   useImperativeHandle(

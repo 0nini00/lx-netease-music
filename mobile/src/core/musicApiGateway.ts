@@ -65,7 +65,7 @@ const getMusicId = (musicInfo: LX.Music.MusicInfoOnline) => {
     case 'kg':
       return musicInfo.meta.hash ?? musicInfo.meta.songId
     default:
-      return musicInfo.meta.songId
+      throw new Error('Unsupported source: ' + (musicInfo as { source: string }).source)
   }
 }
 

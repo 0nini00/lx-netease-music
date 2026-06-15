@@ -6,10 +6,10 @@ import { apis } from '../api-source'
 import hotSearch from './hotSearch'
 import comment from './comment'
 import {resolveQualityAlias} from "@/utils/musicSdk/utils";
-// import tipSearch from './tipSearch'
+import tipSearch from './tipSearch'
 
 const tx = {
-  // tipSearch,
+  tipSearch,
   leaderboard,
   songList,
   musicSearch,

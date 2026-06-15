@@ -33,26 +33,35 @@ export const toNewMusicInfo = (oldMusicInfo: any): LX.Music.MusicInfo => {
     }
 
     switch (oldMusicInfo.source) {
+
       case 'kg':
+
         meta.hash = oldMusicInfo.hash
+
         newInfo.id = oldMusicInfo.songmid + '_' + oldMusicInfo.hash
+
         break
+
       case 'tx':
+
         meta.strMediaMid = oldMusicInfo.strMediaMid
+
         meta.id = oldMusicInfo.songId
+
         meta.albumMid = oldMusicInfo.albumMid
+
         break
-      case 'mg':
-        meta.copyrightId = oldMusicInfo.copyrightId
-        meta.lrcUrl = oldMusicInfo.lrcUrl
-        meta.mrcUrl = oldMusicInfo.mrcUrl
-        meta.trcUrl = oldMusicInfo.trcUrl
-        break
+
     }
+
   }
 
+
+
   return newInfo
+
 }
+
 
 export const toOldMusicInfo = (minfo: LX.Music.MusicInfo) => {
   const oInfo: Record<string, any> = {
@@ -84,12 +93,6 @@ export const toOldMusicInfo = (minfo: LX.Music.MusicInfo) => {
         oInfo.strMediaMid = minfo.meta.strMediaMid
         oInfo.albumMid = minfo.meta.albumMid
         oInfo.songId = minfo.meta.id
-        break
-      case 'mg':
-        oInfo.copyrightId = minfo.meta.copyrightId
-        oInfo.lrcUrl = minfo.meta.lrcUrl
-        oInfo.mrcUrl = minfo.meta.mrcUrl
-        oInfo.trcUrl = minfo.meta.trcUrl
         break
     }
   }

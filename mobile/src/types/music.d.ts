@@ -30,7 +30,7 @@ declare namespace LX {
     >
 
     interface MusicInfoMetaBase {
-      songId: string | number // 歌曲ID，mg源为copyrightId，local为文件路径
+      songId: string | number // 歌曲ID，local为文件路径
       albumName: string // 歌曲专辑名称
       picUrl?: string | null // 歌曲图片链接
       toggleMusicInfo?: MusicInfoOnline | null
@@ -73,7 +73,7 @@ declare namespace LX {
       meta: MusicInfoMeta_local
     }
 
-    interface MusicInfo_online_common extends MusicInfoBase<'kw' | 'wy' | 'git'> {
+    interface MusicInfo_online_common extends MusicInfoBase<'wy'> {
       meta: MusicInfoMeta_online
     }
 
@@ -95,17 +95,7 @@ declare namespace LX {
       meta: MusicInfoMeta_tx
     }
 
-    interface MusicInfoMeta_mg extends MusicInfoMeta_online {
-      copyrightId: string // 歌曲copyrightId
-      lrcUrl?: string // 歌曲lrcUrl
-      mrcUrl?: string // 歌曲mrcUrl
-      trcUrl?: string // 歌曲trcUrl
-    }
-    interface MusicInfo_mg extends MusicInfoBase<'mg'> {
-      meta: MusicInfoMeta_mg
-    }
-
-    type MusicInfoOnline = MusicInfo_online_common | MusicInfo_kg | MusicInfo_tx | MusicInfo_mg
+    type MusicInfoOnline = MusicInfo_online_common | MusicInfo_kg | MusicInfo_tx
     type MusicInfo = MusicInfoOnline | MusicInfoLocal
 
     interface LyricInfo {
@@ -132,6 +122,15 @@ declare namespace LX {
     interface MusicInfoOtherSourceSave {
       id: string
       list: MusicInfoOnline[]
+    }
+    interface PlayListInfo {
+      id: string | number
+      name: string
+      trackCount: number
+      coverImgUrl: string
+      creator: { nickname: string }
+      playCount?: number
+      description?: string
     }
   }
 }

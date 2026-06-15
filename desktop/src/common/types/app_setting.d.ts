@@ -112,6 +112,11 @@ declare global {
        * 音乐 API 网关 Key 请求头名称
        */
       'common.music_api_gateway_key_header': string
+      /**
+       * 音乐 API 网关是否允许不安全的 HTTPS
+       */
+      'common.music_api_gateway_allow_insecure_https': boolean
+
 
       /**
        * 启动时自动播放歌曲

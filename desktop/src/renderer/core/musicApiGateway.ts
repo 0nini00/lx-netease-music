@@ -49,11 +49,11 @@ const getHeaders = () => {
 }
 
 const getResponseBody = async(url: string) => {
-  const resp = await (httpFetch(url, {
-    method: 'get',
-    headers: getHeaders(),
-    timeout: 15000,
-    allowInsecureHttps: appSetting['common.music_api_gateway_allow_insecure_https'],
+  const resp = await (httpFetch(url, {
+    method: 'get',
+    headers: getHeaders(),
+    timeout: 15000,
+    allowInsecureHttps: appSetting['common.music_api_gateway_allow_insecure_https'],
   }) as any).promise
 
   if (resp.statusCode >= 300 && resp.statusCode < 400) {
@@ -74,7 +74,7 @@ const getMusicId = (musicInfo: LX.Music.MusicInfoOnline) => {
     case 'kg':
       return musicInfo.meta.hash ?? musicInfo.meta.songId
     default:
-      return musicInfo.meta.songId
+      return (musicInfo as any).meta.songId
   }
 }
 

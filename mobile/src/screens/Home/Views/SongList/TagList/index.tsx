@@ -6,7 +6,7 @@ import List, { type ListProps, type ListType } from './List'
 export default () => {
   const [visible, setVisible] = useState(false)
   const listRef = useRef<ListType>(null)
-  // const [info, setInfo] = useState({ souce: 'kw', activeId: '' })
+  // const [info, setInfo] = useState({ souce: 'kg', activeId: '' })
 
   useEffect(() => {
     let isInited = false

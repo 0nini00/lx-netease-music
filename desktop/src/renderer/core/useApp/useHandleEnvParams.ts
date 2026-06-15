@@ -43,7 +43,7 @@ const useInitEnvParamPlay = () => {
 
   return async(playStr?: string) => {
     if (playStr == null || typeof playStr != 'string') return
-    // -play="source=kw&link=链接、ID"
+    // -play="source=kg&link=链接、ID"
     // -play="source=myList&name=名字"
     // -play="source=myList&name=名字&index=位置"
     const params = parseUrlParams(playStr)
@@ -64,10 +64,8 @@ const useInitEnvParamPlay = () => {
           playList(targetList.id, getListPlayIndex(await getListMusics(targetList.id), params.index))
         }
         break
-      case 'kw':
       case 'kg':
       case 'tx':
-      case 'mg':
       case 'wy':
         void playSongListDetail(params.source, params.link, parseInt(params.index))
         break

@@ -50,9 +50,12 @@ declare namespace LX {
       meta: MusicInfoMeta_local
     }
 
-    interface MusicInfo_online_common extends MusicInfoBase<'kw' | 'wy'> {
+    interface MusicInfo_online_common extends MusicInfoBase<'wy'> {
+
       meta: MusicInfoMeta_online
+
     }
+
 
     interface MusicInfoMeta_kg extends MusicInfoMeta_online {
       qualitys: MusicQualityTypeKg[]
@@ -72,17 +75,7 @@ declare namespace LX {
       meta: MusicInfoMeta_tx
     }
 
-    interface MusicInfoMeta_mg extends MusicInfoMeta_online {
-      copyrightId: string // 歌曲copyrightId
-      lrcUrl?: string // 歌曲lrcUrl
-      mrcUrl?: string // 歌曲mrcUrl
-      trcUrl?: string // 歌曲trcUrl
-    }
-    interface MusicInfo_mg extends MusicInfoBase<'mg'> {
-      meta: MusicInfoMeta_mg
-    }
-
-    type MusicInfoOnline = MusicInfo_online_common | MusicInfo_kg | MusicInfo_tx | MusicInfo_mg
+    type MusicInfoOnline = MusicInfo_online_common | MusicInfo_kg | MusicInfo_tx
     type MusicInfo = MusicInfoOnline | MusicInfoLocal
 
     interface LyricInfo {

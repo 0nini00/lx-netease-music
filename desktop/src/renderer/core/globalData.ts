@@ -1,7 +1,7 @@
 // import defaultSetting from '@common/defaultSetting'
 import createWorkers from '@renderer/worker'
 
-window.lx = {
+(window as any).lx = {
   // appSetting: defaultSetting,
   isEditingHotKey: false,
   isPlayedStop: false,

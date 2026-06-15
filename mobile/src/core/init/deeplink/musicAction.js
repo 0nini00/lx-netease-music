@@ -42,24 +42,11 @@ import { addTempPlayList } from '@/core/player/tempPlayList'
 // }
 
 const filterInfoByPlayMusic = (musicInfo) => {
+
   switch (musicInfo.source) {
-    case 'kw':
-      musicInfo = dataVerify(
-        [
-          { key: 'name', types: ['string'], required: true, max: 200 },
-          { key: 'singer', types: ['string'], required: true, max: 200 },
-          { key: 'source', types: ['string'], required: true },
-          { key: 'songmid', types: ['string', 'number'], max: 64, required: true },
-          { key: 'img', types: ['string'], max: 1024 },
-          { key: 'albumId', types: ['string', 'number'], max: 64 },
-          { key: 'interval', types: ['string'], max: 64 },
-          { key: 'albumName', types: ['string'], max: 64 },
-          { key: 'types', types: ['object'], required: true },
-        ],
-        musicInfo
-      )
-      break
+
     case 'kg':
+
       musicInfo = dataVerify(
         [
           { key: 'name', types: ['string'], required: true, max: 200 },
@@ -109,43 +96,6 @@ const filterInfoByPlayMusic = (musicInfo) => {
           { key: 'interval', types: ['string'], max: 64 },
           { key: 'albumName', types: ['string'], max: 64 },
           { key: 'types', types: ['object'], required: true },
-        ],
-        musicInfo
-      )
-      break
-    case 'mg':
-      musicInfo = dataVerify(
-        [
-          { key: 'name', types: ['string'], required: true, max: 200 },
-          { key: 'singer', types: ['string'], required: true, max: 200 },
-          { key: 'source', types: ['string'], required: true },
-          { key: 'songmid', types: ['string', 'number'], max: 64, required: true },
-          { key: 'img', types: ['string'], max: 1024 },
-          { key: 'albumId', types: ['string', 'number'], max: 64 },
-          { key: 'interval', types: ['string'], max: 64 },
-          { key: 'albumName', types: ['string'], max: 64 },
-          { key: 'types', types: ['object'], required: true },
-
-          { key: 'copyrightId', types: ['string', 'number'], required: true, max: 64 },
-          { key: 'lrcUrl', types: ['string'], max: 1024 },
-          { key: 'trcUrl', types: ['string'], max: 1024 },
-          { key: 'mrcUrl', types: ['string'], max: 1024 },
-        ],
-        musicInfo
-      )
-    case 'git':
-      musicInfo = dataVerify(
-        [
-          { key: 'name', types: ['string'], required: true, max: 200 },
-          { key: 'singer', types: ['string'], required: true, max: 200 },
-          { key: 'source', types: ['string'], required: true },
-          { key: 'songmid', types: ['string'], max: 64, required: true },
-          { key: 'img', types: ['string'], max: 1024 },
-          { key: 'albumId', types: ['string'], max: 64 },
-          { key: 'interval', types: ['string'], max: 64 },
-          { key: 'albumName', types: ['string'], max: 200 },
-          { key: 'types', types: ['object'], required: true },
-          { key: '_gitcodeData', types: ['object'], required: true },
         ],
         musicInfo
       )

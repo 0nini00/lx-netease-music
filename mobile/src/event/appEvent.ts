@@ -302,14 +302,8 @@ export class AppEvent extends Event {
   wyPlaylistsRefresh() {
     this.emit('wyPlaylistsRefresh')
   }
-  'yt-cookie-set'(cookie: string) {
-    this.emit('yt-cookie-set', cookie)
-  }
   showWebLogin() {
     this.emit('showWebLogin')
-  }
-  showYouTubeLogin() {
-    this.emit('showYouTubeLogin')
   }
 }
 

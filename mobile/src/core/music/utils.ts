@@ -597,7 +597,7 @@ export const getOnlineOtherSourceLyricInfo = async ({
 
   let reqPromise: Promise<LX.Music.LyricInfo>
   try {
-    reqPromise = musicSdk[musicInfo.source].getLyric(toOldMusicInfo(musicInfo)).promise
+    reqPromise = (musicSdk[musicInfo.source].getLyric(toOldMusicInfo(musicInfo)) as { promise: Promise<LX.Music.LyricInfo> }).promise
   } catch (err: any) {
     reqPromise = Promise.reject(err)
   }
@@ -639,7 +639,7 @@ export const handleGetOnlineLyricInfo = async ({
   // console.log(musicInfo.source)
   let reqPromise: Promise<LX.Music.LyricInfo>
   try {
-    reqPromise = musicSdk[musicInfo.source].getLyric(toOldMusicInfo(musicInfo)).promise
+    reqPromise = (musicSdk[musicInfo.source].getLyric(toOldMusicInfo(musicInfo)) as { promise: Promise<LX.Music.LyricInfo> }).promise
   } catch (err) {
     reqPromise = Promise.reject(err)
   }

@@ -151,8 +151,6 @@ export const getCachedLyricInfo = async(musicInfo: LX.Music.MusicInfo): Promise<
       if (lrcInfo.lxlyric == null) {
         switch (musicInfo.source) { // 以下源支持lxlyric 重新获取
           case 'kg':
-          case 'kw':
-          case 'mg':
           case 'wy':
           case 'tx':
             break

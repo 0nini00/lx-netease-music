@@ -1,10 +1,6 @@
-import kw from './kw'
 import kg from './kg'
 import tx from './tx'
 import wy from './wy'
-import mg from './mg'
-import git from './git'
-// import yt from './yt'
 import { supportQuality } from './api-source'
 
 const sources = {
@@ -21,22 +17,10 @@ const sources = {
       name: '网易音乐',
       id: 'wy',
     },
-    {
-      name: 'Gitcode',
-      id: 'git',
-    },
-    // {
-    //   name: 'YouTube',
-    //   id: 'yt',
-    // },
   ],
-  kw,
   kg,
   tx,
   wy,
-  mg,
-  git,
-  // yt,
 }
 export default {
   ...sources,

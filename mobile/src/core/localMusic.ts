@@ -118,7 +118,7 @@ export async function addLocalMusicToList(): Promise<void> {
       filePath: m.filePath,
       ext: getFileExtension(m.filePath),
     },
-  })) as LX.Music.MusicInfoOnline[]
+  })) as LX.Music.MusicInfoLocal[]
 
   const targetListId = listState.defaultList.id
   await overwriteListMusics(targetListId, musicInfos)
@@ -192,7 +192,7 @@ async function startScan(directoryPath: string) {
     const hasLocalList = listState.userList.some(item => item.id === LOCAL_LIST_ID)
 
     // 映射到 MusicInfo 格式
-    const musicInfos: LX.Music.MusicInfoOnline[] = results.map(m => ({
+    const musicInfos: LX.Music.MusicInfoLocal[] = results.map(m => ({
       id: m.id,
       name: m.name,
       singer: m.singer,

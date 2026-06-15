@@ -11,12 +11,9 @@ const sources: Array<{
   //   name: '测试接口',
   //   disabled: false,
   //   supportQualitys: {
-  //     kw: ['128k'],
   //     kg: ['128k'],
   //     tx: ['128k'],
   //     wy: ['128k'],
-  //     mg: ['128k'],
-  //     // bd: ['128k'],
   //   },
   // },
   // {
@@ -24,7 +21,7 @@ const sources: Array<{
   //   name: '临时接口',
   //   disabled: false,
   //   supportQualitys: {
-  //     kw: ['128k'],
+  //     kg: ['128k'],
   //   },
   // },
 ]

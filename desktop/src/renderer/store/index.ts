@@ -90,10 +90,8 @@ export const getSourceI18nPrefix = () => {
 export const sourceNames = computed(() => {
   const prefix = getSourceI18nPrefix()
   const sourceNames: Record<LX.OnlineSource | 'all', string> = {
-    kw: 'kw',
     tx: 'tx',
     kg: 'kg',
-    mg: 'mg',
     wy: 'wy',
     all: window.i18n.t(prefix + 'all' as any),
   }

@@ -13,7 +13,7 @@ export const useDialog = () => {
   return errorDialog
 }
 
-export const sources = ['kw', 'kg', 'tx', 'wy', 'mg']
+export const sources = ['kg', 'tx', 'wy']
 export const sourceVerify = source => {
   if (!sources.includes(source)) throw new Error('Source no match')
 }

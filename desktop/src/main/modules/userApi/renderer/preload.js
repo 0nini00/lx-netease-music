@@ -25,24 +25,32 @@ const eventNames = Object.values(EVENT_NAMES)
 const events = {
   request: null,
 }
-const allSources = ['kw', 'kg', 'tx', 'wy', 'mg', 'local']
+const allSources = ['kg', 'tx', 'wy', 'local']
+
 const supportQualitys = {
-  kw: ['128k', '320k', 'flac', 'flac24bit'],
+
   kg: ['128k', '320k', 'flac', 'flac24bit'],
+
   tx: ['128k', '320k', 'flac', 'flac24bit'],
+
   wy: ['128k', '320k', 'flac', 'flac24bit'],
-  mg: ['128k', '320k', 'flac', 'flac24bit'],
+
   local: [],
+
 }
+
 const supportActions = {
-  kw: ['musicUrl'],
+
   kg: ['musicUrl'],
+
   tx: ['musicUrl'],
+
   wy: ['musicUrl'],
-  mg: ['musicUrl'],
-  xm: ['musicUrl'],
+
   local: ['musicUrl', 'lyric', 'pic'],
+
 }
+
 
 const httpsRxp = /^https:/
 const getRequestAgent = url => {
@@ -117,11 +125,9 @@ const handleRequest = (context, { requestKey, data }) => {
  *                    openDevTools: false,
  *                    message: 'xxx',
  *                    sources: {
- *                         kw: ['128k', '320k', 'flac', 'flac24bit'],
  *                         kg: ['128k', '320k', 'flac', 'flac24bit'],
  *                         tx: ['128k', '320k', 'flac', 'flac24bit'],
  *                         wy: ['128k', '320k', 'flac', 'flac24bit'],
- *                         mg: ['128k', '320k', 'flac', 'flac24bit'],
  *                     }
  *                 }
  */

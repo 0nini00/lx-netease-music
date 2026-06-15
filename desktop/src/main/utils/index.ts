@@ -253,10 +253,10 @@ export const getTheme = () => {
   // themeId = 'naruto'
   // themeId = 'pink'
   // themeId = 'black'
-  let theme = themes.find(theme => theme.id == themeId)
+  let theme = themes.find((theme: LX.Theme) => theme.id == themeId)
   if (!theme) {
     userThemes = getStore(STORE_NAMES.THEME).get('themes') as LX.Theme[] | null ?? []
-    theme = userThemes.find(theme => theme.id == themeId)
+    theme = userThemes.find((theme: LX.Theme) => theme.id == themeId)
     if (theme) {
       if (theme.config.extInfo['--background-image'] != 'none') {
         theme = copyTheme(theme)
@@ -267,7 +267,7 @@ export const getTheme = () => {
       }
     } else {
       themeId = global.lx.appSetting['theme.id'] == 'auto' && shouldUseDarkColors ? 'black' : 'green'
-      theme = themes.find(theme => theme.id == themeId) as LX.Theme
+      theme = themes.find((theme: LX.Theme) => theme.id == themeId) as LX.Theme
     }
   }
 
