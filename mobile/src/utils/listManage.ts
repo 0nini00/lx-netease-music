@@ -276,7 +276,7 @@ export const listMusicUpdateInfo = async (
     if (index < 0) continue;
 
     const existingInfo = targetList[index];
-    const newInfo = { ...existingInfo, ...musicInfo, meta: { ...existingInfo.meta, ...musicInfo.meta } };
+    const newInfo = { ...existingInfo, ...musicInfo, meta: { ...existingInfo.meta, ...musicInfo.meta } } as LX.Music.MusicInfo;
     targetList.splice(index, 1, newInfo);
     updateListIds.add(id);
   }
@@ -324,7 +324,7 @@ export async function applyListOperation(
 ): Promise<LX.List.ListDataFull> {
   const data = JSON.parse(JSON.stringify(currentData));
 
-  const userListMap = new Map(data.userList.map(l => [l.id, l]));
+  const userListMap = new Map<string, LX.List.UserListInfoFull>(data.userList.map((l: LX.List.UserListInfoFull) => [l.id, l]));
   const getTargetList = (listId: string): LX.Music.MusicInfo[] | undefined => {
     return listId === LIST_IDS.DEFAULT ? data.defaultList :
       listId === LIST_IDS.LOVE ? data.loveList :
@@ -362,7 +362,7 @@ export async function applyListOperation(
     case 'list_update_position': {
       const allUserLists = Array.from(userListMap.values());
       const listsToMove: LX.List.UserListInfoFull[] = [];
-      const remainingMap = new Map(userListMap);
+      const remainingMap = new Map<string, LX.List.UserListInfoFull>(userListMap);
       const idsToMove = new Set(operation.data.ids);
 
       idsToMove.forEach(id => {
@@ -443,7 +443,7 @@ export async function applyListOperation(
         const index = targetList.findIndex(m => m.id === musicInfo.id);
         if (index > -1) {
           const existingInfo = targetList[index];
-          targetList[index] = { ...existingInfo, ...musicInfo, meta: { ...existingInfo.meta, ...musicInfo.meta } };
+          targetList[index] = { ...existingInfo, ...musicInfo, meta: { ...existingInfo.meta, ...musicInfo.meta } } as LX.Music.MusicInfo;
         }
       });
       break;

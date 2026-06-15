@@ -8,7 +8,7 @@ import { useTheme } from '@/store/theme/hook'
 import { getSearchSetting } from '@/utils/data'
 import { BorderWidths } from '@/theme'
 
-const SEARCH_TYPE_LIST = ['music', 'songlist', 'singer', 'album'] as const
+const SEARCH_TYPE_LIST = ['music', 'songlist', 'singer'] as const
 
 export default () => {
   const t = useI18n()
@@ -17,7 +17,11 @@ export default () => {
 
   useEffect(() => {
     void getSearchSetting().then((info) => {
-      setType(info.type)
+      if ((info.type as string) === 'album') {
+        setType('music')
+      } else {
+        setType(info.type)
+      }
     })
   }, [])
 

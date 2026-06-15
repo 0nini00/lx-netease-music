@@ -58,12 +58,12 @@ const ListHeader = ({ detailInfo, info, onBack }: { detailInfo: DetailInfo, info
           userId: detailInfo.userId as number,
           name: detailInfo.name,
           coverImgUrl: detailInfo.imgUrl || '',
-          trackCount: info.total || 0,
+          trackCount: Number(info.total || 0),
         })
       } else {
         removeWySubscribedPlaylist(info.id)
       }
-    }).catch(err => {
+    }).catch((err: any) => {
       toast(`操作失败: ${err.message}`)
     })
   }, [isSubscribed, info, detailInfo])
@@ -78,7 +78,7 @@ const ListHeader = ({ detailInfo, info, onBack }: { detailInfo: DetailInfo, info
     })
   }
 
-  const handleMenuPress = ({ action }: { action: 'edit' | 'delete' }) => {
+  const handleMenuPress = ({ action }: { action: string }) => {
     setMenuVisible(false)
     switch (action) {
       case 'edit':
@@ -98,7 +98,7 @@ const ListHeader = ({ detailInfo, info, onBack }: { detailInfo: DetailInfo, info
             toast('删除成功')
             removeWySubscribedPlaylist(info.id)
             onBack()
-          }).catch(err => {
+          }).catch((err: any) => {
             toast(`删除失败: ${err.message}`)
           })
         })
@@ -181,7 +181,7 @@ export default ({ info, onBack, initialScrollToInfo }: { info: ListInfoItem, onB
   }, [info.source, info.id])
 
   useEffect(() => {
-    const handleJumpPosition = () => {
+    const handleJumpPosition = async () => {
       let listId = playerState.playMusicInfo.listId
       if (listId === LIST_IDS.TEMP) listId = listState.tempListMeta.id
       if (listId !== `${info.source}__${info.id}`) return
@@ -225,7 +225,7 @@ export default ({ info, onBack, initialScrollToInfo }: { info: ListInfoItem, onB
       }
 
       // 否则，处理返回事件，关闭当前的歌单详情浮层
-      handleBack()
+      handleBack?.()
       return true
     }
     const subscription = BackHandler.addEventListener('hardwareBackPress', onBackPress)
@@ -252,7 +252,7 @@ export default ({ info, onBack, initialScrollToInfo }: { info: ListInfoItem, onB
   }, [playlists, handleBack, info.id, detailInfo.name, detailInfo.desc])
 
   useEffect(() => {
-    if (initialScrollToInfo && detailInfo.total > 0 && !initialScrollDoneRef.current) {
+    if (initialScrollToInfo && (detailInfo.total ?? 0) > 0 && !initialScrollDoneRef.current) {
       initialScrollDoneRef.current = true
       setTimeout(() => {
         musicListRef.current?.scrollToInfo(initialScrollToInfo)
@@ -260,12 +260,12 @@ export default ({ info, onBack, initialScrollToInfo }: { info: ListInfoItem, onB
     }
   }, [detailInfo.total, initialScrollToInfo])
 
-  const ListHeaderComponent = useMemo(() => <ListHeader detailInfo={detailInfo} info={info} onBack={handleBack} />, [detailInfo, info, handleBack])
+  const ListHeaderComponent = useMemo(() => <ListHeader detailInfo={detailInfo} info={info} onBack={handleBack || (() => {})} />, [detailInfo, info, handleBack])
 
   const isCreator = useMemo(() => {
-    return info.source === 'wy' &&
+    return !!(info.source === 'wy' &&
       detailInfo.userId &&
-      String(detailInfo.userId) === String(loggedInUserId)
+      String(detailInfo.userId) === String(loggedInUserId))
   }, [info.source, detailInfo.userId, loggedInUserId])
 
   const handleListUpdate = useCallback((newList: LX.Music.MusicInfoOnline[]) => {

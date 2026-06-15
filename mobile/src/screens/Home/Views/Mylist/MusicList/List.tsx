@@ -159,7 +159,7 @@ const List = forwardRef<ListType, ListProps>(
         })
       }
 
-      const handleJumpPosition = () => {
+      const handleJumpPosition = async () => {
         requestAnimationFrame(() => {
           const listId = playerState.playMusicInfo.listId
           if (!listId) return
@@ -297,7 +297,6 @@ const List = forwardRef<ListType, ListProps>(
             item={item}
             index={index}
             activeIndex={activeIndex}
-            onScrollBeginDrag={Keyboard.dismiss}
             onPress={handlePress}
             onLongPress={handleLongPress}
             onShowMenu={onShowMenu}

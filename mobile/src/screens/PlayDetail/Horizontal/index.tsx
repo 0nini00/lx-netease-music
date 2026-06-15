@@ -27,7 +27,7 @@ export default memo(({ componentId }: { componentId: string }) => {
     let appstateListener = AppState.addEventListener('change', (state) => {
       switch (state) {
         case 'active':
-          if (!commonState.componentIds.comment) screenkeepAwake()
+          if (!commonState.componentIds.some(item => item.name === COMPONENT_IDS.comment)) screenkeepAwake()
           break
         case 'background':
           screenUnkeepAwake()
@@ -36,7 +36,7 @@ export default memo(({ componentId }: { componentId: string }) => {
     })
 
     const handleComponentIdsChange = (ids: CommonState['componentIds']) => {
-      if (ids.comment) screenUnkeepAwake()
+      if (ids.some(item => item.name === COMPONENT_IDS.comment)) screenUnkeepAwake()
       else if (AppState.currentState == 'active') screenkeepAwake()
     }
 

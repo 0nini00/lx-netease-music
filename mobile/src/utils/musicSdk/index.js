@@ -10,10 +10,6 @@ import { supportQuality } from './api-source'
 const sources = {
   sources: [
     {
-      name: '酷我音乐',
-      id: 'kw',
-    },
-    {
       name: '酷狗音乐',
       id: 'kg',
     },
@@ -24,10 +20,6 @@ const sources = {
     {
       name: '网易音乐',
       id: 'wy',
-    },
-    {
-      name: '咪咕音乐',
-      id: 'mg',
     },
     {
       name: 'Gitcode',

@@ -12,8 +12,8 @@ export default ({
   musicInfo,
   width,
 }: {
-  listInfo: LX.List.MyListInfo
-  onPress: (listInfo: LX.List.MyListInfo) => void
+  listInfo: any
+  onPress: (listInfo: any) => void
   musicInfo: LX.Music.MusicInfo
   width: number
 }) => {

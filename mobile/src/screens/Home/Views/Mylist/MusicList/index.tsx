@@ -222,7 +222,7 @@ export default () => {
       )}
       <ListMenu
         ref={listMenuRef}
-        onPlay={(info) => {
+        onPlay={(info: any) => {
           handlePlay(info.listId, info.index)
         }}
         onPlayLater={(info) => {

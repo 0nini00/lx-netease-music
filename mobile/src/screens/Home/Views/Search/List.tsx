@@ -6,7 +6,6 @@ import MusicList, { type MusicListType } from './MusicList'
 import BlankView, { type BlankViewType } from './BlankView'
 import SonglistList from './SonglistList'
 import SingerList, { type SingerListType } from './SingerList'
-import AlbumList, { type AlbumListType } from './AlbumList'
 
 interface ListProps {
   onSearch: (keyword: string) => void
@@ -50,8 +49,6 @@ export default forwardRef<ListType, ListProps>(({ onSearch, onOpenDetail }, ref)
         return <SonglistList ref={listRef} onOpenDetail={onOpenDetail} />
       case 'singer':
         return <SingerList ref={listRef as any} />
-      case 'album':
-        return <AlbumList ref={listRef as any} />
       case 'music':
       default:
         return <MusicList ref={listRef} />

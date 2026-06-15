@@ -103,6 +103,7 @@ export const toOldMusicInfo = (minfo: LX.Music.MusicInfo) => {
  */
 export const fixNewMusicInfoQuality = (musicInfo: LX.Music.MusicInfo) => {
   if (musicInfo.source == 'local') return musicInfo
+  if (!musicInfo.meta._qualitys) return musicInfo
 
   // @ts-expect-error
   if (musicInfo.meta._qualitys.flac32bit && !musicInfo.meta._qualitys.flac24bit) {

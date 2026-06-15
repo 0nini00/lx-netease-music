@@ -44,7 +44,7 @@ export default forwardRef<HeaderType, HeaderProps>(({ onShowNavBar }, ref) => {
         style={styles.currentListText}
         color={theme['c-button-font']}
       >
-        {t(`setting_${activeId}`)}
+        {t(`setting_${activeId}` as any)}
       </Text>
     </TouchableOpacity>
   )

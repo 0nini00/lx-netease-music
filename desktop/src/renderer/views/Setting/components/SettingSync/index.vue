@@ -17,6 +17,10 @@ SyncClient(v-if="sync.mode == 'client'")
 SyncServer(v-else)
 SyncWebDAV
 
+//- 备份设置
+dt#backup {{ $t('setting__backup') }}
+Backup
+
 </template>
 
 <script>
@@ -27,6 +31,7 @@ import { appSetting, updateSetting } from '@renderer/store/setting'
 import SyncServer from './SyncServer.vue'
 import SyncClient from './SyncClient.vue'
 import SyncWebDAV from './SyncWebDAV.vue'
+import Backup from './Backup.vue'
 
 export default {
   name: 'SettingSync',
@@ -34,6 +39,7 @@ export default {
     SyncServer,
     SyncClient,
     SyncWebDAV,
+    Backup,
   },
   setup() {
     return {

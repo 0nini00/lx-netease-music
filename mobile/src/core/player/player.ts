@@ -5,8 +5,9 @@ import {
   setPause,
   setPlay,
   setResource,
-  setStop, initTrackInfo,
+  setStop, setVolume, initTrackInfo,
 } from '@/plugins/player'
+import { fadeOut, fadeIn, stopFade, isCrossfadeEnabled, getCrossfadeDuration } from '@/plugins/player/crossfade'
 import { setStatusText } from '@/core/player/playStatus'
 import playerState from '@/store/player/state'
 import settingState from '@/store/setting/state'
@@ -298,8 +299,23 @@ export const handlePlay = async () => {
 
   if (!musicInfo) return
 
+  // 如果启用淡入淡出且正在播放，先淡出
+  if (isCrossfadeEnabled() && !isEmpty()) {
+    const duration = getCrossfadeDuration()
+    try {
+      await fadeOut(duration / 2) // 淡出用一半时间
+    } catch (err) {
+      console.log('Fade out error:', err)
+    }
+  }
+
   await setStop()
   global.app_event.pause()
+
+  // 淡出后恢复音量到用户设定值，防止下一首歌静音播放
+  if (isCrossfadeEnabled()) {
+    void setVolume(0)
+  }
 
   clearDelayNextTimeout()
   clearLoadTimeout()
@@ -660,6 +676,7 @@ export const play = () => {
  * 暂停播放
  */
 export const pause = async () => {
+  stopFade() // 停止淡入淡出效果
   await setPause()
 }
 
@@ -667,6 +684,7 @@ export const pause = async () => {
  * 停止播放
  */
 export const stop = async () => {
+  stopFade() // 停止淡入淡出效果
   await setStop()
   setTimeout(() => {
     global.app_event.stop()

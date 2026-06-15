@@ -64,6 +64,7 @@ declare global {
   var lx: GlobalData
   var i18n: I18n
   var app_event: AppEventTypes & {
+    emit: (event: string, ...args: any[]) => void;
     triggerSearch: (text: string) => void;
     'wy-cookie-set': (cookie: string) => void
     'yt-cookie-set': (cookie: string) => void

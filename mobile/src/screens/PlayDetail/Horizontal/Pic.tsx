@@ -91,8 +91,8 @@ export default memo(({ componentId }: { componentId: string }) => {
   }, [winWidth, winHeight, statusBarHeight, isCoverSpin]);
 
   const imageStyle = useMemo(() => ({
-    width: '100%',
-    height: '100%',
+    width: '100%' as const,
+    height: '100%' as const,
     borderRadius: imageContainerStyle.borderRadius,
   }), [imageContainerStyle.borderRadius]);
 

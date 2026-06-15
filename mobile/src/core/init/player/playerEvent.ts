@@ -1,9 +1,11 @@
 import { playNext, setMusicUrl } from '@/core/player/player'
 import { setStatusText } from '@/core/player/playStatus'
 import { getPosition, isEmpty, setStop } from '@/plugins/player'
+import { fadeIn, isCrossfadeEnabled, getCrossfadeDuration } from '@/plugins/player/crossfade'
 import { isActive } from '@/utils/tools'
 import BackgroundTimer from 'react-native-background-timer'
 import playerState from '@/store/player/state'
+import settingState from '@/store/setting/state'
 import { setNowPlayTime } from '@/core/player/progress'
 import { updateScrobbleInfo } from '@/core/player/scrobble' // [修改] 从新模块导入
 
@@ -75,6 +77,15 @@ export default () => {
   const handlePlaying = () => {
     setStatusText('')
     clearLoadingTimeout()
+
+    // 如果启用淡入淡出，则在歌曲开始播放时淡入
+    if (isCrossfadeEnabled()) {
+      const duration = getCrossfadeDuration()
+      const targetVolume = settingState.setting['player.volume']
+      void fadeIn(duration / 2, targetVolume).catch((err) => {
+        console.log('Fade in error:', err)
+      })
+    }
   }
 
   const handleEmpied = () => {

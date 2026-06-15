@@ -6,6 +6,7 @@ import { setStop, updateOptions } from '@/plugins/player'
 import { delayUpdateMusicInfo } from '@/plugins/player/playList'
 import playerState from '@/store/player/state'
 import settingState from '@/store/setting/state'
+import { consumeStopAfterCurrentTrack } from '@/core/sleepTimer'
 
 export default async (setting: LX.AppSetting) => {
   const setPlayStatus = () => {
@@ -26,6 +27,13 @@ export default async (setting: LX.AppSetting) => {
     // global.app_event.stop()
     // global.app_event.setProgress(0)
     setStatusText(global.i18n.t('player__end'))
+    const stopAfterCurrentTrack = consumeStopAfterCurrentTrack()
+    if (stopAfterCurrentTrack) {
+      void pause().then(() => {
+        stopAfterCurrentTrack()
+      })
+      return
+    }
     void playNext(true)
     // })
   }

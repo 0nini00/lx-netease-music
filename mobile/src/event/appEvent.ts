@@ -296,6 +296,21 @@ export class AppEvent extends Event {
   playlist_updated(data: { source: string, listId: string }) {
     this.emit('playlist_updated', data)
   }
+  'wy-cookie-set'(cookie: string) {
+    this.emit('wy-cookie-set', cookie)
+  }
+  wyPlaylistsRefresh() {
+    this.emit('wyPlaylistsRefresh')
+  }
+  'yt-cookie-set'(cookie: string) {
+    this.emit('yt-cookie-set', cookie)
+  }
+  showWebLogin() {
+    this.emit('showWebLogin')
+  }
+  showYouTubeLogin() {
+    this.emit('showYouTubeLogin')
+  }
 }
 
 type EventMethods = Omit<EventType, keyof Event>

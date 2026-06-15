@@ -26,7 +26,7 @@ declare namespace LX {
       id: 'temp'
       name: '临时列表'
       // list: LX.Music.MusicInfo[]
-      // TODO: save default lists info
+      // Note: Default lists info is managed by store state
       meta: {
         id?: string
       }

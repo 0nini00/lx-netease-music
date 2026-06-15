@@ -173,6 +173,41 @@ dd
       id="setting_basic_playbar_progress_style_full" name="setting_basic_playbar_progress_style"
       need :model-value="appSetting['common.playBarProgressStyle']" value="full" :label="$t('setting__basic_playbar_progress_style_full')" @update:model-value="updateSetting({'common.playBarProgressStyle': $event})")
 
+//- 列表设置
+dd
+  h3#list {{ $t('setting__list') }}
+  div
+    .gap-top
+      base-checkbox(id="setting_list_actionButtonsVisible_enable" :model-value="appSetting['list.actionButtonsVisible']" :label="$t('setting__list_action_btn')" @update:model-value="updateSetting({'list.actionButtonsVisible': $event})")
+    .gap-top
+      base-checkbox(id="setting_list_showSource_enable" :model-value="appSetting['list.isShowSource']" :label="$t('setting__list_source')" @update:model-value="updateSetting({'list.isShowSource': $event})")
+    .gap-top
+      base-checkbox(id="setting_list_scroll_enable" :model-value="appSetting['list.isSaveScrollLocation']" :label="$t('setting__list_scroll')" @update:model-value="updateSetting({'list.isSaveScrollLocation': $event})")
+    .gap-top
+      base-checkbox(id="setting_list_clickAction_enable" :model-value="appSetting['list.isClickPlayList']" :label="$t('setting__list_click_action')" @update:model-value="updateSetting({'list.isClickPlayList': $event})")
+dd
+  h3#list_addMusicLocationType {{ $t('setting__list_add_music_location_type') }}
+  div
+    base-checkbox.gap-left(
+      id="setting_list_add_music_location_type_top" name="setting_list_add_music_location_type" need
+      :model-value="appSetting['list.addMusicLocationType']" value="top" :label="$t('setting__list_add_music_location_type_top')"
+      @update:model-value="updateSetting({'list.addMusicLocationType': $event})")
+    base-checkbox.gap-left(
+      id="setting_list_add_music_location_type_bottom" name="setting_list_add_music_location_type" need
+      :model-value="appSetting['list.addMusicLocationType']" value="bottom" :label="$t('setting__list_add_music_location_type_bottom')"
+      @update:model-value="updateSetting({'list.addMusicLocationType': $event})")
+
+//- 搜索设置
+dd
+  h3#search {{ $t('setting__search') }}
+  div
+    .gap-top
+      base-checkbox(id="setting_search_showHot_enable" :model-value="appSetting['search.isShowHotSearch']" :label="$t('setting__search_hot')" @update:model-value="updateSetting({'search.isShowHotSearch': $event})")
+    .gap-top
+      base-checkbox(id="setting_search_showHistory_enable" :model-value="appSetting['search.isShowHistorySearch']" :label="$t('setting__search_history')" @update:model-value="updateSetting({'search.isShowHistorySearch': $event})")
+    .gap-top
+      base-checkbox(id="setting_search_focusSearchBox_enable" :model-value="appSetting['search.isFocusSearchBox']" :label="$t('setting__search_focus_search_box')" @update:model-value="updateSetting({'search.isFocusSearchBox': $event})")
+
 ThemeSelectorModal(v-model="isShowThemeSelectorModal")
 ThemeEditModal(v-model="isShowThemeEditModal" :theme-id="editThemeId" @submit="handleRefreshTheme")
 play-timeout-modal(v-model="isShowPlayTimeoutModal")

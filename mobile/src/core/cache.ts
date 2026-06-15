@@ -1,7 +1,7 @@
 const artistDataCache = new Map<string, any>()
 const artistDetailCache = new Map<string, any>()
 let dailyRecSongsCache: LX.Music.MusicInfoOnline[] | null = null
-let dailyRecPlaylistsCache: any[] | null = null
+let dailyRecPlaylistsCache: LX.Music.PlayListInfo[] | null = null
 
 /**
  * 获取歌手页面的列表缓存数据
@@ -65,11 +65,11 @@ export const clearDailyRecSongsCache = () => {
   dailyRecSongsCache = null;
 };
 
-export const getDailyRecPlaylistsCache = (): any[] | null => {
+export const getDailyRecPlaylistsCache = (): LX.Music.PlayListInfo[] | null => {
   return dailyRecPlaylistsCache;
 };
 
-export const setDailyRecPlaylistsCache = (data: any[]) => {
+export const setDailyRecPlaylistsCache = (data: LX.Music.PlayListInfo[]) => {
   dailyRecPlaylistsCache = data;
 };
 

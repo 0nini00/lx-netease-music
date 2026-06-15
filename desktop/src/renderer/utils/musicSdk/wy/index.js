@@ -6,6 +6,7 @@ import musicSearch from './musicSearch'
 import songList from './songList'
 import hotSearch from './hotSearch'
 import comment from './comment'
+import singer from './singer'
 import * as apiCookie from './api-cookie'
 // import tipSearch from './tipSearch'
 
@@ -16,6 +17,7 @@ const wy = {
   songList,
   hotSearch,
   comment,
+  singer,
   getMusicUrl(songInfo, type) {
     if (!apiCookie.hasCookie()) return apis('wy').getMusicUrl(songInfo, type)
 

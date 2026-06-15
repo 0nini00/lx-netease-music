@@ -5,6 +5,7 @@ import searchState, { type SearchType } from '@/store/search/state'
 import commonState from '@/store/common/state'
 import searchMusicState from '@/store/search/music/state'
 import searchSonglistState, { type ListInfoItem } from '@/store/search/songlist/state'
+import searchSingerState from '@/store/search/singer/state'
 import { getSearchSetting, saveSearchSetting } from '@/utils/data'
 import { createStyle } from '@/utils/tools'
 import TipList, { type TipListType } from './TipList'
@@ -16,7 +17,7 @@ import { COMPONENT_IDS } from '@/config/constant'
 interface SearchInfo {
   temp_source: LX.OnlineSource
   source: LX.OnlineSource | 'all'
-  searchType: 'music' | 'songlist'
+  searchType: SearchType
 }
 
 export default () => {
@@ -68,25 +69,46 @@ export default () => {
 
   useEffect(() => {
     void getSearchSetting().then(info => {
+      let currentType = info.type
+      if ((currentType as string) === 'album') {
+        currentType = 'music'
+      }
       searchInfo.current.temp_source = info.temp_source
       searchInfo.current.source = info.source
-      searchInfo.current.searchType = info.type
-      switch (info.type) {
+      searchInfo.current.searchType = currentType
+      switch (currentType) {
         case 'music':
           headerBarRef.current?.setSourceList(searchMusicState.sources, info.source)
           break
         case 'songlist':
           headerBarRef.current?.setSourceList(searchSonglistState.sources, info.source)
           break
+        case 'singer':
+          headerBarRef.current?.setSourceList(searchSingerState.sources, (info.source as string) === 'all' ? 'all' : (info.source === 'wy' || info.source === 'kg' ? info.source : 'wy') as any)
+          break
       }
       headerBarRef.current?.setText(searchState.searchText)
-      listRef.current?.loadList(searchState.searchText, searchInfo.current.source, searchInfo.current.searchType)
+      listRef.current?.loadList(searchState.searchText, searchInfo.current.source, currentType)
     })
 
     const handleTypeChange = (type: SearchType) => {
       setSelectedList(null)
       searchInfo.current.searchType = type
       void saveSearchSetting({ type })
+      switch (type) {
+        case 'music':
+          headerBarRef.current?.setSourceList(searchMusicState.sources, searchInfo.current.source)
+          break
+        case 'songlist':
+          headerBarRef.current?.setSourceList(searchSonglistState.sources, searchInfo.current.source)
+          break
+        case 'singer':
+          if (searchInfo.current.source !== 'all' && searchInfo.current.source !== 'wy' && searchInfo.current.source !== 'kg') {
+            searchInfo.current.source = 'wy'
+          }
+          headerBarRef.current?.setSourceList(searchSingerState.sources, searchInfo.current.source)
+          break
+      }
       if (searchState.searchText) {
         listRef.current?.loadList(searchState.searchText, searchInfo.current.source, type)
       }
@@ -118,7 +140,7 @@ export default () => {
   const handleSourceChange: HeaderBarProps['onSourceChange'] = source => {
     setSelectedList(null)
     searchInfo.current.source = source
-    void saveSearchSetting({ source })
+    void saveSearchSetting({ source: source as any })
     if (searchState.searchText) {
       listRef.current?.loadList(searchState.searchText, source, searchInfo.current.searchType)
     }
@@ -161,9 +183,9 @@ export default () => {
       <View style={styles.content} onLayout={handleLayout}>
         {selectedList ? (
           <SonglistDetail
-            componentId={commonState.componentIds.find(c => c.name === COMPONENT_IDS.home)?.id}
             info={selectedList}
             onBack={() => setSelectedList(null)}
+            initialScrollToInfo={null}
           />
         ) : (
           <>

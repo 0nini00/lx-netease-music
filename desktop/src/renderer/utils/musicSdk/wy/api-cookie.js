@@ -14,6 +14,7 @@ const getNoCopyrightRcmdSongId = songInfo => {
 const createFallbackSongInfo = (songInfo, songId) => ({
   ...songInfo,
   songmid: songId,
+  id: songId,
   meta: {
     ...songInfo.meta,
     songId,

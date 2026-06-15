@@ -10,7 +10,7 @@ import { playOnlineList } from '@/core/list';
 import { usePlayerMusicInfo } from '@/store/player/hook';
 import playerState from '@/store/player/state';
 import listState from '@/store/list/state';
-import {LIST_IDS} from "@/config/constant.ts";
+import { LIST_IDS, COMPONENT_IDS } from "@/config/constant.ts";
 
 export default memo(({ componentId, similarSongs: initialSimilarSongs }: { componentId: string, similarSongs: LX.Music.MusicInfoOnline[] }) => {
   const listRef = useRef<OnlineListType>(null);
@@ -18,7 +18,7 @@ export default memo(({ componentId, similarSongs: initialSimilarSongs }: { compo
   const [similarSongs, setSimilarSongs] = useState(initialSimilarSongs)
 
   useEffect(() => {
-    const handleJumpPosition = () => {
+    const handleJumpPosition = async () => {
       let listId = playerState.playMusicInfo.listId;
       if (listId === LIST_IDS.TEMP) listId = listState.tempListMeta.id;
       if (listId !== 'similar_songs_list') return;
@@ -35,7 +35,7 @@ export default memo(({ componentId, similarSongs: initialSimilarSongs }: { compo
   }, [])
 
   useEffect(() => {
-    setComponentId('SIMILAR_SONGS_SCREEN', componentId);
+    setComponentId(COMPONENT_IDS.SIMILAR_SONGS_SCREEN, componentId);
     if (similarSongs && similarSongs.length) {
       listRef.current?.setList(similarSongs);
       listRef.current?.setStatus('end');
@@ -70,7 +70,7 @@ export default memo(({ componentId, similarSongs: initialSimilarSongs }: { compo
           onRefresh={() => {}}
           onListUpdate={handleListUpdate}
         />
-        <PlayerBar componentId={componentId} />
+        <PlayerBar />
       </View>
     </PageContent>
   );

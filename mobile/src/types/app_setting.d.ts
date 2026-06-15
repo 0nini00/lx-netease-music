@@ -201,6 +201,21 @@ declare global {
       'player.isEnableAudioOffload': boolean
 
       /**
+       * 是否启用淡入淡出效果
+       */
+      'player.isCrossfadeEnabled': boolean
+
+      /**
+       * 淡入淡出持续时间（秒）
+       */
+      'player.crossfadeDuration': number
+
+      /**
+       * 是否启用无缝播放（专辑连续播放无间隙）
+       */
+      'player.isGaplessEnabled': boolean
+
+      /**
        * 是否显示歌词翻译
        */
       'player.isShowLyricTranslation': boolean

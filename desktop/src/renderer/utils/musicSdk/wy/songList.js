@@ -174,12 +174,14 @@ export default {
           source: 'wy',
           interval: formatPlayTime(item.dt / 1000),
           songmid: item.id,
+          id: item.id,
           img: item.al?.picUrl ?? '',
           lrc: null,
           otherSource: null,
           types,
           _types,
           typeUrl: {},
+          meta: {},
         })
       } else {
         list.push({
@@ -190,12 +192,14 @@ export default {
           source: 'wy',
           interval: formatPlayTime(item.dt / 1000),
           songmid: item.id,
+          id: item.id,
           img: item.al?.picUrl,
           lrc: null,
           otherSource: null,
           types,
           _types,
           typeUrl: {},
+          meta: {},
         })
       }
     })

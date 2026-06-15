@@ -24,7 +24,7 @@ export const SETTING_CATEGORIES: Array<{
   screens: SettingScreenIds[]
 }> = [
   { id: 'basic', title: '基本设置', desc: '语言、主页、显示与常用行为', screens: ['basic'] },
-  { id: 'player', title: '播放设置', desc: '播放方式、网关、音质、歌词、桌面歌词', screens: ['player', 'lyric_desktop'] },
+  { id: 'player', title: '播放设置', desc: '播放方式、音质、歌词、桌面歌词', screens: ['player', 'lyric_desktop'] },
   { id: 'search', title: '搜索设置', desc: '搜索源、热搜、历史搜索', screens: ['search'] },
   { id: 'list', title: '列表设置', desc: '歌单展示、添加位置、列表行为', screens: ['list'] },
   { id: 'download', title: '下载设置', desc: '保存路径、写入歌词、封面与元数据', screens: ['download'] },

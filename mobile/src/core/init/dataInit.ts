@@ -50,21 +50,21 @@ export default async (appSetting: LX.AppSetting) => {
   if (wy_cookie) {
     bootLog('Wy like list init...')
     wyUserApi.getUid(wy_cookie)
-      .then(uid =>
+      .then((uid: any) =>
       {
         setWyUid(uid)
-        wyUserApi.getLikedSongList(uid, wy_cookie).then(ids => {
+        wyUserApi.getLikedSongList(uid, wy_cookie).then((ids: any) => {
           setWyLikedSongs(ids)
           bootLog('Wy like list inited.')
         })
-        wyUserApi.getUserPlaylists(uid, wy_cookie).then(playlists => {
+        wyUserApi.getUserPlaylists(uid, wy_cookie).then((playlists: any) => {
           setWySubscribedPlaylists(playlists)
           bootLog('Wy subscribed playlists inited.')
-        }).catch(err => {
+        }).catch((err: any) => {
           bootLog(`Wy subscribed playlists init failed: ${err.message}`)
         })
       })
-      .catch(err => {
+      .catch((err: any) => {
         bootLog(`Wy like list init failed: ${err.message}`)
       })
   }

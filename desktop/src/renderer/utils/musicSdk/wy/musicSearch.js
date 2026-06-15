@@ -83,11 +83,16 @@ export default {
         source: 'wy',
         interval: formatPlayTime(item.dt / 1000),
         songmid: item.id,
+        id: item.id,
         img: item.al.picUrl,
         lrc: null,
         types,
         _types,
         typeUrl: {},
+        meta: {
+          _qualitys: _types,
+          picUrl: item.al.picUrl,
+        },
       }
     })
   },
@@ -114,6 +119,29 @@ export default {
         source: 'wy',
       }
       // return result.data
+    })
+  },
+
+  searchSinger(str, page = 1, limit = 20) {
+    const searchRequest = eapiRequest('/api/cloudsearch/pc', {
+      s: str,
+      type: 100, // 100: 歌手
+      limit,
+      total: page === 1,
+      offset: limit * (page - 1),
+    })
+    return searchRequest.promise.then(({ body }) => {
+      if (!body || body.code !== 200) {
+        return { list: [], total: 0 }
+      }
+      const rawList = body.result?.artists || []
+      const list = rawList.map(item => ({
+        id: item.id,
+        name: item.name,
+        picUrl: item.picUrl || item.img1v1Url || null,
+        alias: item.alias || [],
+      }))
+      return { list, total: body.result?.artistCount || 0 }
     })
   },
 }

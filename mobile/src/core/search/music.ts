@@ -36,7 +36,7 @@ export const search = async (
             page,
             searchMusicState.listInfos.all.limit,
             0,
-            { enableSerpApi: false }
+            { enableSerpApi: true }
           ) as Promise<SearchResult>) ?? Promise.reject(new Error('source not found: ' + source))
         ).catch((error: any) => {
           console.log(error)

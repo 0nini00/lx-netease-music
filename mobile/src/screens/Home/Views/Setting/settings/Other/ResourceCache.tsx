@@ -22,9 +22,7 @@ export default memo(() => {
   const t = useI18n()
   const [cleaning, setCleaning] = useState(false)
   const [cacheSize, setCacheSize] = useState<string | null>(null)
-  // const setting = useGetter('common', 'setting')
-  // TODO clear list cache
-  // const clearCache = useDispatch('list', 'clearCache')
+  // List cache clearing is handled by clearMusicUrlCache and clearLyricCache
 
   const handleGetAppCacheSize = () => {
     void Promise.all([getAppCacheSize(), getCacheSize()]).then(([size, size2]) => {

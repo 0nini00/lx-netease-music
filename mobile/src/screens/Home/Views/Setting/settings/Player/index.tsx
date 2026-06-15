@@ -12,6 +12,9 @@ import IsShowLyricTranslation from './IsShowLyricTranslation'
 import IsShowLyricRoma from './IsShowLyricRoma'
 import IsS2T from './IsS2T'
 import MaxCache from './MaxCache'
+import Crossfade from './Crossfade'
+import CrossfadeDuration from './CrossfadeDuration'
+import Gapless from './Gapless'
 import { useI18n } from '@/lang'
 
 export default memo(() => {
@@ -23,6 +26,9 @@ export default memo(() => {
       <IsAutoCleanPlayedList />
       <IsHandleAudioFocus />
       <IsEnableAudioOffload />
+      <Crossfade />
+      <CrossfadeDuration />
+      <Gapless />
       <IsShowBluetoothLyric />
       <IsShowLyricTranslation />
       <IsShowLyricRoma />
@@ -32,4 +38,3 @@ export default memo(() => {
     </Section>
   )
 })
-

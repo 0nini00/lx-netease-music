@@ -15,7 +15,7 @@ export interface SelectInfo {
 const initSelectInfo = {}
 
 export interface ListMenuProps {
-  // onPlay: (selectInfo: SelectInfo) => void
+  onPlay: (selectInfo: SelectInfo) => void
   onPlayLater: (selectInfo: SelectInfo) => void
   onAdd: (selectInfo: SelectInfo) => void
   onMove: (selectInfo: SelectInfo) => void
@@ -83,6 +83,7 @@ export default forwardRef<ListMenuType, ListMenuProps>((props, ref) => {
       const musicInfo = selectInfo.musicInfo
       const menu: Menus[number][] = []
 
+      menu.push({ action: 'play', label: t('play') })
       if (menuSetting.playLater) menu.push({ action: 'playLater', label: t('play_later') })
       menu.push({ action: 'download', label: t('download') })
       menu.push({ action: 'add', label: t('add_to') })
@@ -123,6 +124,7 @@ export default forwardRef<ListMenuType, ListMenuProps>((props, ref) => {
     const info = selectInfo
     if (!info) return
     switch (action) {
+      case 'play': props.onPlay(info); break
       case 'playLater': props.onPlayLater(info); break
       case 'download': props.onDownload(info); break
       case 'add': props.onAdd(info); break

@@ -145,12 +145,12 @@ export const MUSIC_TOGGLE_MODE_LIST = [
 
 export const DEFAULT_SETTING = {
   leaderboard: {
-    source: 'kw' as LX.OnlineSource,
-    boardId: 'kw__16',
+    source: 'wy' as LX.OnlineSource,
+    boardId: 'wy__0',
   },
 
   songList: {
-    source: 'kw' as LX.OnlineSource,
+    source: 'wy' as LX.OnlineSource,
     sortId: 'new',
     tagName: '',
     tagId: '',

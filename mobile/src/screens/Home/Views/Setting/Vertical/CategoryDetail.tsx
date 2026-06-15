@@ -36,8 +36,6 @@ const CATEGORY_COMPONENT_MAP: Record<SettingCategoryId, JSX.Element> = {
   ),
   theme: <Theme />,
   other: <Other />,
-  version: <></>,
-  about: <></>,
 }
 
 export default memo(({

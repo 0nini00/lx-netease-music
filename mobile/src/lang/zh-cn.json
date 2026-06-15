@@ -236,8 +236,6 @@
   "search_type_songlist": "歌单",
   "search_type_singer": "歌手",
   "search_failed": "搜索失败",
-  "no_data": "暂无数据",
-  "search_type_album": "专辑",
   "setting__other_dislike_list": "「不喜欢的歌曲」规则",
   "setting__other_dislike_list_label": "规则数量：{num}",
   "setting__other_dislike_list_saved_tip": "已保存",
@@ -613,5 +611,12 @@
   "minute": "分钟",
   "local_music": "本地音乐",
   "local_music_scan": "扫描本地音乐",
-  "local_music_no_files": "未找到本地音乐文件"
+  "local_music_no_files": "未找到本地音乐文件",
+  "play_failed": "播放失败",
+  "setting_play_crossfade": "淡入淡出",
+  "setting_play_crossfade_tip": "歌曲切换时平滑过渡（推荐：3秒）",
+  "setting_play_crossfade_duration": "淡入淡出时长",
+  "setting_play_crossfade_duration_tip": "单位：秒（1-10秒）",
+  "setting_play_gapless": "无缝播放",
+  "setting_play_gapless_tip": "提前预取下一首，减少连续播放的切歌间隔（与淡入淡出互斥）"
 }

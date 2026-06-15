@@ -245,9 +245,9 @@ export default forwardRef<PlayerPlaylistType, {}>((props, ref) => {
         onPlayLater={onPlayLater}
         onAdd={onAdd}
         onDownload={onDownload}
-        onCopyName={handleShare}
+        onCopyName={(info) => handleShare(info.musicInfo)}
         onMusicSourceDetail={onMusicSourceDetail}
-        onDislikeMusic={handleDislikeMusic}
+        onDislikeMusic={(info) => { void handleDislikeMusic(info.musicInfo as any) }}
         onSimilarSongs={onSimilarSongs}
         onLike={onLike}
       />

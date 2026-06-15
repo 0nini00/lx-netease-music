@@ -235,7 +235,6 @@
   "search_type_music": "Song",
   "search_type_songlist": "Playlist",
   "search_type_singer": "Artist",
-  "search_type_album": "Album",
   "setting__other_dislike_list": "Dislike Song Rule",
   "setting__other_dislike_list_label": "Number of rules: {num}",
   "setting__other_dislike_list_saved_tip": "Saved",
@@ -609,5 +608,12 @@
   "minute": "min",
   "local_music": "Local Music",
   "local_music_scan": "Scan Local Music",
-  "local_music_no_files": "No local music files found"
+  "local_music_no_files": "No local music files found",
+  "play_failed": "Play failed",
+  "setting_play_crossfade": "Crossfade",
+  "setting_play_crossfade_tip": "Smooth transition between songs (Recommended: 3s)",
+  "setting_play_crossfade_duration": "Crossfade Duration",
+  "setting_play_crossfade_duration_tip": "Unit: seconds (1-10s)",
+  "setting_play_gapless": "Gapless Playback",
+  "setting_play_gapless_tip": "Preload the next track earlier to reduce gaps between songs (mutually exclusive with crossfade)"
 }

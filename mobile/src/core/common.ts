@@ -4,13 +4,14 @@ import { updateWidget } from '@/utils/nativeModules/musicWidget'
 import { destroy as destroyPlayer } from '@/plugins/player/utils'
 import { initSetting as initAppSetting } from '@/config/setting'
 import { setLanguage as applyLanguage } from '@/lang/i18n'
+import { Platform, PermissionsAndroid } from 'react-native'
 
 import settingActions from '@/store/setting/action'
 import settingState from '@/store/setting/state'
 import commonActions from '@/store/common/action'
 import commonState, { type InitState as CommonStateType } from '@/store/common/state'
 
-import { storageDataPrefix } from '@/config/constant'
+import { storageDataPrefix, COMPONENT_IDS } from '@/config/constant'
 import { saveData } from '@/plugins/storage'
 import { throttle } from '@/utils/common'
 import {
@@ -77,7 +78,7 @@ export const setStatusbarHeight = (size: number) => {
   commonActions.setStatusbarHeight(size)
 }
 
-export const setComponentId = (name: keyof CommonStateType['componentIds'], id: string) => {
+export const setComponentId = (name: COMPONENT_IDS, id: string) => {
   commonActions.setComponentId(name as any, id)
 }
 export const removeComponentId = (name: string) => {
@@ -101,18 +102,29 @@ export const showPactModal = () => {
 export const checkStoragePermissions = async () => {
   const selectedManagedFolder = await getSelectedManagedFolder()
   if (selectedManagedFolder)
-    return (await getPersistedUriList()).some((uri) => selectedManagedFolder.startsWith(uri))
+    return (await getPersistedUriList()).some((uri: any) => selectedManagedFolder.startsWith(uri))
   return false
 }
 
 export const requestStoragePermission = async () => {
-  const isGranted = await checkStoragePermissions()
-  if (isGranted) return isGranted
+  if (Platform.OS !== 'android') return true
 
-  const uri = await selectManagedFolder()
-  if (!uri.isDirectory) return false
-  await setSelectedManagedFolder(uri.path)
-  return true
+  try {
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+      {
+        title: '存储权限',
+        message: '需要访问存储以扫描本地音乐文件',
+        buttonNeutral: '稍后',
+        buttonNegative: '取消',
+        buttonPositive: '确定',
+      }
+    )
+    return granted === PermissionsAndroid.RESULTS.GRANTED
+  } catch (err) {
+    console.warn('requestStoragePermission error:', err)
+    return false
+  }
 }
 
 export const setBgPic = (pic: string | null) => {

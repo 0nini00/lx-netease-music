@@ -113,9 +113,10 @@ export const handleDislikeMusic = async(musicInfo: LX.Music.MusicInfoOnline, lis
         }),
       }).promise;
 
-      if (statusCode == 200 && body.code === 200) {
+      const responseBody = body as any
+      if (statusCode == 200 && responseBody.code === 200) {
         // 将返回的新歌曲数据转换为应用内部格式
-        const newMusicResult = await musicDetailApi.filterList({ songs: [body.data], privileges: [] })
+        const newMusicResult = await musicDetailApi.filterList({ songs: [responseBody.data], privileges: [] })
         if (newMusicResult.length) {
           const newMusicInfo = newMusicResult[0]
           // 发送事件，通知UI更新

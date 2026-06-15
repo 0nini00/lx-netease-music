@@ -2,7 +2,7 @@ import { forwardRef, memo, useEffect, useImperativeHandle, useState } from 'reac
 import { View } from 'react-native'
 import { BorderWidths } from '@/theme'
 import ButtonBar from './ActionBar'
-import { useNavigationComponentDidAppear } from '@/navigation'
+import { useNavigationComponentDidAppear, pop } from '@/navigation'
 import { NAV_SHEAR_NATIVE_IDS } from '@/config/constant'
 import { scaleSizeW } from '@/utils/pixelRatio'
 import { useTheme } from '@/store/theme/hook'
@@ -135,7 +135,7 @@ export default forwardRef<HeaderType, HeaderProps>(
             </View>
           </View>
         </View>
-        <ButtonBar />
+        <ButtonBar onBack={() => pop(componentId)} />
         {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
         <View style={{ flexGrow: 0, flexShrink: 1, paddingTop: 5, paddingRight: 5 }}>
               <Text style={{ fontSize: 12, color: AppColors.normal20 }} numberOfLines={ 1 }>{playCount || '-'}</Text>

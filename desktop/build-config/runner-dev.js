@@ -1,6 +1,6 @@
 process.env.NODE_ENV = 'development'
 
-const chalk = require('chalk')
+// const chalk = require('chalk')
 const electron = require('electron')
 const path = require('path')
 // const { say } = require('cfonts')
@@ -209,10 +209,8 @@ const logs = [
 function electronLog(data, color) {
   let log = data.toString()
   if (/[0-9A-z]+/.test(log)) {
-    // 抑制某些无关的报错日志
     if (color == 'red' && typeof log === 'string' && logs.some(l => log.includes(l))) return
-
-    console.log(chalk[color](log))
+    console.log(log)
   }
 }
 

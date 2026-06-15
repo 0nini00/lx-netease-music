@@ -74,7 +74,7 @@ global.lx = {
   // },
 }
 
-global.app_event = createAppEventHub()
+global.app_event = createAppEventHub() as any
 global.list_event = createListEventHub()
 global.dislike_event = createDislikeEventHub()
 global.state_event = createStateEventHub()

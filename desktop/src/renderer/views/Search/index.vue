@@ -137,6 +137,6 @@ export default {
 .main {
   position: relative;
   flex: auto;
-  // min-height: 0;
+  min-height: 0;
 }
 </style>

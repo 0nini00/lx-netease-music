@@ -33,6 +33,5 @@ export default async (targetListInfo: LX.List.UserListInfo) => {
   void overwriteListMusics(targetListInfo.id, list)
   const now = Date.now()
   void setListUpdateTime(targetListInfo.id, now)
-  // TODO
-  // setUpdateTime(targetListInfo.id, dateFormat(now))
+  // Update time is already set via setListUpdateTime
 }

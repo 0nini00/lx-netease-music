@@ -3,6 +3,7 @@ import { getNextPlayMusicInfo, resetRandomNextMusicInfo } from '@/core/player/pl
 import { checkUrl } from '@/utils/request'
 import playerState from '@/store/player/state'
 import { isCached } from '@/plugins/player/utils'
+import { isGaplessEnabled } from '@/plugins/player/crossfade'
 
 const preloadMusicInfo = {
   isLoading: false,
@@ -61,7 +62,8 @@ export default () => {
 
   const handlePlayProgressChanged: typeof global.state_event.playProgressChanged = (progress) => {
     const duration = progress.maxPlayTime
-    if (duration > 10 && duration - progress.nowPlayTime < 10 && !preloadMusicInfo.info) {
+    const preloadWindow = isGaplessEnabled() ? 30 : 10
+    if (duration > preloadWindow && duration - progress.nowPlayTime < preloadWindow && !preloadMusicInfo.info) {
       void preloadNextMusicUrl(progress.nowPlayTime)
     }
   }

@@ -16,6 +16,7 @@ export interface SingerDetailData {
     picUrl: string
     publishTime: number
     size: number
+    source: LX.OnlineSource
   }>
   albumHasMore: boolean
 }

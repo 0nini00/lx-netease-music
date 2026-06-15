@@ -13,7 +13,7 @@ export const registerEvent = (socket: LX.Sync.Socket) => {
   unregisterLocalListAction = registerDislikeActionEvent((action) => {
     if (!socket.moduleReadys?.dislike) return
     void socket.remoteQueueDislike.onDislikeSyncAction(action).catch((err) => {
-      // TODO send status
+      // Sync status is handled by the sync client
       socket.moduleReadys.dislike = false
       socket.close(SYNC_CLOSE_CODE.failed)
       console.log(err.message)

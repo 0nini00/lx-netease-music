@@ -12,7 +12,8 @@ import { getPlaylistType, savePlaylistType } from '@/utils/data'
 import wyApi from '@/utils/musicSdk/wy/user'
 import {addWyLikedSong, removeWyLikedSong, updateWySubscribedPlaylistTrackCount} from '@/store/user/action'
 import { clearListDetailCache } from '@/core/songlist'
-import {Text, View} from "react-native";
+import { View } from "react-native";
+import Text from '@/components/common/Text'
 import {useWySubscribedPlaylists} from "@/store/user/hook.ts";
 
 export interface SelectInfo {
@@ -44,7 +45,7 @@ export default forwardRef<MusicMultiAddModalType, MusicMultiAddModalProps>(({ on
   const subscribedPlaylists = useWySubscribedPlaylists()
 
   useEffect(() => {
-    getPlaylistType().then(setPlaylistType);
+    getPlaylistType().then(type => setPlaylistType(type as any));
   }, []);
 
   const handlePlaylistTypeChange = (type: 'local' | 'online') => {
@@ -68,7 +69,7 @@ export default forwardRef<MusicMultiAddModalType, MusicMultiAddModalProps>(({ on
     })
   }
 
-  const handleSelect = (listInfo: LX.List.MyListInfo) => {
+  const handleSelect = (listInfo: any) => {
     dialogRef.current?.setVisible(false)
     const { selectedList, listId: fromListId, isMove } = selectInfo
     if (playlistType === 'online') {
@@ -80,7 +81,7 @@ export default forwardRef<MusicMultiAddModalType, MusicMultiAddModalProps>(({ on
       if (isMove) {
         // 1. 先将歌曲添加到目标歌单
         wyApi.manipulatePlaylistTracks('add', toListId, songIds).then(() => {
-          if (listInfo.name === listInfo.creator.nickname + '喜欢的音乐') {
+          if (listInfo.name === listInfo.creator?.nickname + '喜欢的音乐') {
             for (const songId of songIds) {
               addWyLikedSong(songId);
             }
@@ -91,7 +92,7 @@ export default forwardRef<MusicMultiAddModalType, MusicMultiAddModalProps>(({ on
           // 2. 从源歌单删除歌曲
           return wyApi.manipulatePlaylistTracks('del', sourcePlaylistId, songIds)
         }).then(() => {
-          if (sourcePlaylist.name === sourcePlaylist.creator.nickname + '喜欢的音乐') {
+          if (sourcePlaylist?.name === sourcePlaylist?.creator?.nickname + '喜欢的音乐') {
             for (const songId of songIds) {
               removeWyLikedSong(songId)
             }
@@ -105,12 +106,12 @@ export default forwardRef<MusicMultiAddModalType, MusicMultiAddModalProps>(({ on
           // 4. 更新源歌单的缓存和UI
           clearListDetailCache('wy', sourcePlaylistId)
           global.app_event.playlist_updated({ source: 'wy', listId: sourcePlaylistId })
-        }).catch((err) => {
+        }).catch((err: any) => {
           toast(err.message || t('list_edit_action_tip_move_failed'))
         })
       } else {
         wyApi.manipulatePlaylistTracks('add', toListId, songIds).then(() => {
-          if (listInfo.name === listInfo.creator.nickname + '喜欢的音乐') {
+          if (listInfo.name === listInfo.creator?.nickname + '喜欢的音乐') {
             for (const songId of songIds) {
               addWyLikedSong(songId);
             }
@@ -120,7 +121,7 @@ export default forwardRef<MusicMultiAddModalType, MusicMultiAddModalProps>(({ on
           updateWySubscribedPlaylistTrackCount(toListId, songIds.length)
           clearListDetailCache('wy', toListId)
           global.app_event.playlist_updated({ source: 'wy', listId: toListId })
-        }).catch((err) => {
+        }).catch((err: any) => {
           toast(err.message || t('list_edit_action_tip_add_failed'))
         })
       }

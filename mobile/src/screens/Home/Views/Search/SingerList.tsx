@@ -16,6 +16,9 @@ import { search as searchSinger, getSingerDetail } from '@/core/search/singer'
 import type { SingerResult, SingerDetailData } from '@/store/search/singer/state'
 import { scaleSizeW } from '@/utils/pixelRatio'
 import { BorderWidths } from '@/theme'
+import { setTempList } from '@/core/list'
+import { playList } from '@/core/player/player'
+import { LIST_IDS } from '@/config/constant'
 
 export interface SingerListType {
   loadList: (text: string, source: string) => void
@@ -29,7 +32,6 @@ export default forwardRef<SingerListType>((_, ref) => {
   const [selectedSinger, setSelectedSinger] = useState<SingerResult | null>(null)
   const [detailData, setDetailData] = useState<SingerDetailData | null>(null)
   const [detailLoading, setDetailLoading] = useState(false)
-  const [detailTab, setDetailTab] = useState<'songs' | 'albums'>('songs')
   const [currentSource, setCurrentSource] = useState<string>('all')
   const currentTextRef = useRef('')
 
@@ -76,12 +78,23 @@ export default forwardRef<SingerListType>((_, ref) => {
     setDetailData(null)
   }
 
+  const handleSongPress = async (song: LX.Music.MusicInfoOnline, index: number) => {
+    if (!detailData?.songs.length) return
+    try {
+      const listId = `singer_songs_${selectedSinger?.source}_${selectedSinger?.id}`
+      await setTempList(listId, detailData.songs as any)
+      await playList(LIST_IDS.TEMP, index)
+    } catch (err: any) {
+      toast(err.message || t('play_failed'))
+    }
+  }
+
+  // 2. 如果选中了歌手，展示歌手歌曲列表
   if (selectedSinger) {
     const displaySongs = detailData?.songs ?? []
-    const displayAlbums = detailData?.albums ?? []
     return (
       <View style={styles.detailContainer}>
-        <View style={[styles.detailHeader, { backgroundColor: theme['c-primary-lightest-background-hover'] }]}>
+        <View style={[styles.detailHeader, { backgroundColor: theme['c-primary-background-hover'] }]}>
           <TouchableOpacity onPress={handleBack} style={styles.backBtn}>
             <RNText style={{ color: theme['c-font-label'], fontSize: 16 }}>{'< ' + t('back')}</RNText>
           </TouchableOpacity>
@@ -98,47 +111,32 @@ export default forwardRef<SingerListType>((_, ref) => {
               ) : null}
             </View>
           </View>
-          <View style={styles.detailTabs}>
-            <TouchableOpacity onPress={() => setDetailTab('songs')} style={[styles.tab, detailTab === 'songs' && { borderBottomColor: theme['c-font-label'], borderBottomWidth: 2 }]}>
-              <Text color={detailTab === 'songs' ? theme['c-font-label'] : theme['c-font']}>{t('search_type_music')}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => setDetailTab('albums')} style={[styles.tab, detailTab === 'albums' && { borderBottomColor: theme['c-font-label'], borderBottomWidth: 2 }]}>
-              <Text color={detailTab === 'albums' ? theme['c-font-label'] : theme['c-font']}>{t('search_type_album')}</Text>
-            </TouchableOpacity>
-          </View>
         </View>
         {detailLoading ? (
           <ActivityIndicator style={styles.loadingMore} color={theme['c-font-label']} />
         ) : (
           <ScrollView style={styles.detailContent}>
-            {detailTab === 'songs' ? (
-              displaySongs.length ? displaySongs.map((song, i) => (
-                <View key={song.songmid ? `${song.songmid}_${i}` : `${i}`} style={styles.songItem}>
+            {displaySongs.length ? displaySongs.map((song, i) => (
+                <TouchableOpacity
+                  key={song.id ? `${song.id}_${i}` : `${i}`}
+                  style={styles.songItem}
+                  onPress={() => handleSongPress(song as any, i)}
+                  activeOpacity={0.6}
+                >
                   <Text size={14} numberOfLines={1}>{song.name}</Text>
                   <Text size={11} color={theme['c-font']}>{song.singer} | {song.interval}</Text>
-                </View>
+                </TouchableOpacity>
               )) : (
                 <Text style={styles.emptyText} color={theme['c-font']}>{t('no_data')}</Text>
               )
-            ) : (
-              displayAlbums.length ? displayAlbums.map((album, i) => (
-                <View key={`${album.id}_${i}`} style={styles.songItem}>
-                  <Text size={14} numberOfLines={1}>{album.name}</Text>
-                  <Text size={11} color={theme['c-font']}>
-                    {album.publishTime ? new Date(album.publishTime).getFullYear().toString() : ''}
-                    {album.size ? ` | ${album.size}首` : ''}
-                  </Text>
-                </View>
-              )) : (
-                <Text style={styles.emptyText} color={theme['c-font']}>{t('no_data')}</Text>
-              )
-            )}
+            }
           </ScrollView>
         )}
       </View>
     )
   }
 
+  // 3. 默认渲染歌手列表
   return (
     <ScrollView
       style={styles.container}
@@ -223,8 +221,6 @@ const styles = createStyle({
     borderRadius: scaleSizeW(35),
   },
   singerTextInfo: { flex: 1, marginLeft: 14 },
-  detailTabs: { flexDirection: 'row', marginTop: 8 },
-  tab: { paddingVertical: 8, paddingHorizontal: 16 },
   detailContent: { flex: 1, paddingHorizontal: scaleSizeW(10) },
   songItem: {
     paddingVertical: scaleSizeW(8),

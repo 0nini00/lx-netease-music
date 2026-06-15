@@ -28,20 +28,37 @@ export default ({ onTimerEnd }: Props) => {
       if (isSleepTimerRunning()) {
         const r = getSleepTimerRemaining()
         setRemaining(r)
-        if (r <= 0) {
+        // r === -1 means "end of track" mode
+        if (r === 0) {
           onTimerEnd()
           setRunning(false)
           setVisible(false)
           toast(t('sleep_timer_ended'))
         }
+      } else if (running) {
+        // Timer stopped externally
+        setRunning(false)
+        setRemaining(0)
       }
     }, 1000)
     return () => clearInterval(checkTick)
-  }, [onTimerEnd])
+  }, [onTimerEnd, t, running])
 
   const handleStart = useCallback((minutes: number) => {
     setSelectedMinutes(minutes)
     if (minutes === END_OF_TRACK) {
+      startSleepTimer(
+        -1,
+        undefined,
+        () => {
+          onTimerEnd()
+          setRunning(false)
+          toast(t('sleep_timer_ended'))
+        }
+      )
+      setRunning(true)
+      setRemaining(-1)
+      setVisible(false)
       toast(t('sleep_timer_after_track'))
       return
     }
@@ -58,7 +75,7 @@ export default ({ onTimerEnd }: Props) => {
     setRemaining(minutes * 60 * 1000)
     setVisible(false)
     toast(t('sleep_timer_started') + ': ' + minutes + t('minute'))
-  }, [onTimerEnd])
+  }, [onTimerEnd, t])
 
   const handleStop = useCallback(() => {
     stopSleepTimer()
@@ -68,6 +85,7 @@ export default ({ onTimerEnd }: Props) => {
   }, [])
 
   const formatTime = (ms: number) => {
+    if (ms === -1) return '♪'
     const mins = Math.floor(ms / 60000)
     const secs = Math.floor((ms % 60000) / 1000)
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
@@ -95,6 +113,12 @@ export default ({ onTimerEnd }: Props) => {
                 <Text size={15}>{mins} {t('minute')}</Text>
               </TouchableOpacity>
             ))}
+            <TouchableOpacity
+              style={[styles.option, { borderBottomColor: 'rgba(128,128,128,0.15)' }]}
+              onPress={() => handleStart(END_OF_TRACK)}
+            >
+              <Text size={15}>{t('sleep_timer_after_track')}</Text>
+            </TouchableOpacity>
             <TouchableOpacity
               style={[styles.option, { borderBottomColor: 'rgba(128,128,128,0.15)' }]}
               onPress={() => { setVisible(false); handleStop() }}

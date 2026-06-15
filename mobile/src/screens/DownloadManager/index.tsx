@@ -10,7 +10,7 @@ import { removeTask } from '@/core/download';
 
 export default memo(({ componentId }: { componentId: string }) => {
   useEffect(() => {
-    setComponentId('DOWNLOAD_MANAGER', componentId);
+    setComponentId('DOWNLOAD_MANAGER' as any, componentId);
   }, [componentId]);
 
   const tasks = useDownloadTasks();

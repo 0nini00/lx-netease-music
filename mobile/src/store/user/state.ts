@@ -5,6 +5,10 @@ export interface SubscribedPlaylistInfo {
   coverImgUrl: string
   trackCount: number
   description?: string
+  creator?: {
+    nickname: string
+  }
+  playCount?: string | number
 }
 
 export interface InitState {

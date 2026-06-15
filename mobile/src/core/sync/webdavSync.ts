@@ -426,22 +426,23 @@ async function downloadLists(path: string) {
   return normalizeRemoteListsData(JSON.parse(remoteListsContent))
 }
 
-function mergeRemoteLists(localData: LX.List.ListDataFull, remoteData: LX.List.ListDataFull) {
-  const mergedData = structuredClone(localData)
+async function mergeRemoteLists(localData: LX.List.ListDataFull, remoteData: LX.List.ListDataFull) {
+  let mergedData = structuredClone(localData) as any
   const operationQueue = getOperationQueue()
   let hasConflict = false
 
   for (const operation of operationQueue) {
-    const result = applyListOperation(mergedData, operation)
-    if (!result.success) {
+    try {
+      mergedData = await applyListOperation(mergedData, operation)
+    } catch (err: any) {
       hasConflict = true
-      log.warn(`[WebDAV Sync] Failed to apply operation during merge: ${result.error}`)
+      log.warn(`[WebDAV Sync] Failed to apply operation during merge: ${err.message}`)
     }
   }
 
   for (const listId of Object.keys(remoteData)) {
     if (mergedData[listId]) continue
-    mergedData[listId] = remoteData[listId]
+    mergedData[listId] = (remoteData as any)[listId]
   }
 
   return { mergedData, hasConflict }

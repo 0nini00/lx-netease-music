@@ -17,8 +17,9 @@ import PlayerPlaylist, { PlayerPlaylistType } from '@/components/player/PlayerPl
 import MiniProgressBar from "@/components/player/PlayerBar/components/MiniProgressBar.tsx"
 import playerState from '@/store/player/state'
 import { LIST_IDS } from '@/config/constant'
+import { pause } from '@/core/player/player'
 
-export default memo(({ componentId, isHome = false }: { isHome?: boolean }) => {
+export default memo(({ componentId, isHome = false }: { componentId?: string, isHome?: boolean }) => {
   const { keyboardShown } = useKeyboard()
   const theme = useTheme()
   const musicInfo = usePlayerMusicInfo()
@@ -48,7 +49,7 @@ export default memo(({ componentId, isHome = false }: { isHome?: boolean }) => {
   }
 
   const handleTimerEnd = useCallback(() => {
-    global.app_event.pause()
+    void pause()
   }, [])
 
   const gestureAction = useRef<'drawer' | 'playlist' | null>(null)
@@ -114,7 +115,7 @@ export default memo(({ componentId, isHome = false }: { isHome?: boolean }) => {
         </View>
       </View>
     ),
-    [theme, isHome, handleShowPlaylist, panResponder.panHandlers, drawerLayoutPosition],
+    [theme, isHome, handleShowPlaylist, handleTimerEnd, handleNavigate, handleLongPress, panResponder.panHandlers, drawerLayoutPosition],
   )
 
   return (

@@ -79,7 +79,7 @@ export default () => {
 
 
   useEffect(() => {
-    const handleJumpPosition = () => {
+    const handleJumpPosition = async () => {
       let listId = playerState.playMusicInfo.listId
       if (listId === LIST_IDS.TEMP) listId = listState.tempListMeta.id
       if (!listId || !listId.includes('__')) return
@@ -96,6 +96,7 @@ export default () => {
         play_count: '',
       }
 
+      if (!playerState.playMusicInfo.musicInfo) return
       const musicInfo = 'progress' in playerState.playMusicInfo.musicInfo
         ? playerState.playMusicInfo.musicInfo.metadata.musicInfo
         : playerState.playMusicInfo.musicInfo

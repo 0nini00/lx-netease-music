@@ -53,10 +53,10 @@ export default memo(() => {
     }
     setLoading(true)
     return wyApi.getUserPlaylists(uid, cookie)
-      .then(playlists => {
+      .then((playlists: any) => {
         setWySubscribedPlaylists(playlists)
       })
-      .catch(err => {
+      .catch((err: any) => {
         toast(`${showErrorPrefix}: ${err.message}`)
       })
       .finally(() => {
@@ -65,7 +65,7 @@ export default memo(() => {
   }, [cookie, uid])
 
   useEffect(() => {
-    const handleJumpPosition = () => {
+    const handleJumpPosition = async () => {
       let listId = playerState.playMusicInfo.listId
       if (listId === LIST_IDS.TEMP) listId = listState.tempListMeta.id
       if (!listId) return
@@ -78,14 +78,15 @@ export default memo(() => {
       const playlistInfo: ListInfoItem = {
         id: String(targetPlaylist.id),
         name: targetPlaylist.name,
-        author: targetPlaylist.creator?.nickname,
+        author: targetPlaylist.creator?.nickname ?? '',
         img: targetPlaylist.coverImgUrl,
-        play_count: targetPlaylist.playCount,
+        play_count: targetPlaylist.playCount ? String(targetPlaylist.playCount) : undefined,
         desc: targetPlaylist.description,
         source: 'wy',
         userId: targetPlaylist.userId,
         total: targetPlaylist.trackCount,
       }
+      if (!playerState.playMusicInfo.musicInfo) return
       const musicInfo = 'progress' in playerState.playMusicInfo.musicInfo
         ? playerState.playMusicInfo.musicInfo.metadata.musicInfo
         : playerState.playMusicInfo.musicInfo
@@ -206,7 +207,7 @@ export default memo(() => {
         createAlertRef.current?.setVisible(false)
         return loadPlaylists('刷新歌单失败')
       })
-      .catch(err => {
+      .catch((err: any) => {
         toast(`创建失败: ${err.message}`)
       })
       .finally(() => {

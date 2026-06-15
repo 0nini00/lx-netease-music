@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef } from 'react'
+import { memo, useEffect, useMemo, useRef } from 'react'
 import {
   View,
   TouchableOpacity,
@@ -20,6 +20,8 @@ import Text from '@/components/common/Text'
 import { type Position } from './ListMenu'
 import { scaleSizeH } from '@/utils/pixelRatio'
 import Loading from '@/components/common/Loading'
+import { LOCAL_LIST_ID, LOCAL_LIST_NAME, scanAndImportLocalMusic } from '@/core/localMusic'
+import { getListMusics } from '@/utils/listManage'
 
 type FlatListType = FlatListProps<LX.List.MyListInfo>
 
@@ -88,9 +90,15 @@ const ListItem = memo(
             {item.name}
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={handleShowMenu} ref={moreButtonRef} style={styles.listMoreBtn}>
-          <Icon name="dots-vertical" color={theme['c-350']} size={12} />
-        </TouchableOpacity>
+        {item.id === LOCAL_LIST_ID ? (
+          <TouchableOpacity onPress={() => void scanAndImportLocalMusic()} style={styles.listMoreBtn}>
+            <Icon name="add-music" color={theme['c-350']} size={12} />
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity onPress={handleShowMenu} ref={moreButtonRef} style={styles.listMoreBtn}>
+            <Icon name="dots-vertical" color={theme['c-350']} size={12} />
+          </TouchableOpacity>
+        )}
       </View>
     )
   },
@@ -114,11 +122,30 @@ export default ({
   const allList = useMyList()
   const activeListId = useActiveListId()
 
+  const listData = useMemo(() => {
+    const localList = allList.find((l) => l.id === LOCAL_LIST_ID)
+    const otherList = allList.filter((l) => l.id !== LOCAL_LIST_ID)
+    return [
+      (localList ?? { id: LOCAL_LIST_ID, name: LOCAL_LIST_NAME }) as LX.List.MyListInfo,
+      ...otherList,
+    ]
+  }, [allList])
+
   const handleToggleList = (item: LX.List.MyListInfo) => {
     // setVisiblePanel(false)
     global.app_event.changeLoveListVisible(false)
     requestAnimationFrame(() => {
-      setActiveList(item.id)
+      if (item.id === LOCAL_LIST_ID) {
+        void getListMusics(item.id).then((musics) => {
+          if (!musics.length) {
+            void scanAndImportLocalMusic()
+          } else {
+            setActiveList(item.id)
+          }
+        })
+      } else {
+        setActiveList(item.id)
+      }
     })
   }
 
@@ -156,7 +183,7 @@ export default ({
       ref={flatListRef}
       onScroll={handleScroll}
       style={styles.container}
-      data={allList}
+      data={listData}
       maxToRenderPerBatch={9}
       // updateCellsBatchingPeriod={80}
       windowSize={9}

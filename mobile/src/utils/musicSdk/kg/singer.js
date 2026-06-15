@@ -10,10 +10,12 @@ export default {
       returnList.push({
         name: albumInfo.albumname,
         author: albumInfo.singername,
-        img: albumInfo.replaceAll('{size}', '480'),
-        album_id: albumInfo.albumid,
+        img: albumInfo.imgurl ? albumInfo.imgurl.replace('{size}', '480') : '',
+        album_id: String(albumInfo.albumid),
+        publishTime: albumInfo.publishtime || '',
       })
     })
+    return returnList
   },
   async getSingerInfo(singerid) {
     if (singerid == 0) throw new Error('歌手不存在') // kg源某些歌曲在歌手没被kg收录时返回的歌手id为0
@@ -50,7 +52,7 @@ export default {
   async getSingerAlbumList(singerid, page, limit) {
     if (singerid == 0) throw new Error('歌手不存在') // kg源某些歌曲在歌手没被kg收录时返回的歌手id为0
     const requestObj = httpFetch(
-      `http://mobiles.kugou.com/api/v5/singer/song?singerid=${singerid}&page=${page}&pagesize=${limit}`
+      `http://mobiles.kugou.com/api/v5/singer/album?singerid=${singerid}&page=${page}&pagesize=${limit}`
     )
     let { body, statusCode } = await requestObj.promise
     if (statusCode !== 200) throw new Error('获取歌手专辑列表失败')

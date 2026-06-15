@@ -54,7 +54,7 @@ const startDownload = async (task: DownloadTask) => {
     const highQualityLevels: LX.Quality[] = ['flac', 'hires', 'master', 'atmos', 'atmos_plus'];
     console.log(`[Batch Download] Forcing cookie for ${task.musicInfo.name}`);
     try {
-      const result = await wySdk.cookie.getMusicUrl(task.musicInfo, task.quality).promise;
+      const result: any = await wySdk.cookie.getMusicUrl(task.musicInfo, task.quality).promise;
       if (!result.url) throw new Error('Cookie 未能获取到URL');
       if (result.level === 'exhigh' && highQualityLevels.includes(task.quality)) {
         throw new Error(`请求的音质 ${task.quality} 不可用`);
@@ -149,7 +149,7 @@ const handleMetadata = async (task: DownloadTask, filePath: string) => {
   // 写入封面
   if (settingState.setting['download.writePicture']) {
     try {
-      const picUrl = await getPicUrl({ musicInfo: task.musicInfo });
+      const picUrl = await getPicUrl({ musicInfo: task.musicInfo as LX.Music.MusicInfoOnline, isRefresh: false });
       const extension = getFileExtensionFromUrl(picUrl)
       const picPath = `${downloadDir}/temp.${extension}`
       await RNFetchBlob.config({ path: picPath }).fetch('GET', picUrl);
@@ -219,7 +219,7 @@ export const retryMetadata = async (taskId: string) => {
   // 重试写入封面
   if (metadataStatus.cover === 'fail' && settingState.setting['download.writePicture']) {
     try {
-      const picUrl = await getPicUrl({ musicInfo: task.musicInfo as LX.Music.MusicInfoOnline });
+      const picUrl = await getPicUrl({ musicInfo: task.musicInfo as LX.Music.MusicInfoOnline, isRefresh: true });
       const extension = getFileExtensionFromUrl(picUrl);
       const picPath = `${RNFetchBlob.fs.dirs.CacheDir}/lx_temp_pic_${task.id}.${extension}`;
 

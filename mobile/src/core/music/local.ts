@@ -24,7 +24,9 @@ const getOtherSourceByLocal = async <T>(
   if (result.length)
     try {
       return await handler(result)
-    } catch {}
+    } catch (err) {
+      console.log('getOtherSourceByLocal handler failed:', err)
+    }
   if (musicInfo.name.includes('-')) {
     const [name, singer] = musicInfo.name.split('-').map((val) => val.trim())
     result = await getOtherSource(
@@ -38,7 +40,9 @@ const getOtherSourceByLocal = async <T>(
     if (result.length)
       try {
         return await handler(result)
-      } catch {}
+      } catch (err) {
+        console.log('getOtherSourceByLocal handler failed (name-singer):', err)
+      }
     result = await getOtherSource(
       {
         ...musicInfo,
@@ -50,7 +54,9 @@ const getOtherSourceByLocal = async <T>(
     if (result.length)
       try {
         return await handler(result)
-      } catch {}
+      } catch (err) {
+        console.log('getOtherSourceByLocal handler failed (singer-name):', err)
+      }
   }
   let fileName =
     (await stat(musicInfo.meta.filePath).catch(() => ({ name: null }))).name ??
@@ -59,7 +65,7 @@ const getOtherSourceByLocal = async <T>(
     fileName = fileName.substring(0, fileName.lastIndexOf('.'))
     if (fileName != musicInfo.name) {
       if (fileName.includes('-')) {
-        const [name, singer] = fileName.split('-').map((val) => val.trim())
+        const [name, singer] = fileName.split('-').map((val: string) => val.trim())
         result = await getOtherSource(
           {
             ...musicInfo,
@@ -71,7 +77,9 @@ const getOtherSourceByLocal = async <T>(
         if (result.length)
           try {
             return await handler(result)
-          } catch {}
+          } catch (err) {
+            console.log('getOtherSourceByLocal handler failed (filename):', err)
+          }
         result = await getOtherSource(
           {
             ...musicInfo,
@@ -93,7 +101,9 @@ const getOtherSourceByLocal = async <T>(
       if (result.length)
         try {
           return await handler(result)
-        } catch {}
+        } catch (err) {
+          console.log('getOtherSourceByLocal handler failed (alternative):', err)
+        }
     }
   }
 
@@ -124,7 +134,9 @@ export const getMusicUrl = async ({
         return url
       }
     )
-  } catch {}
+  } catch (err) {
+    console.log('getLocalMusicUrl online source failed:', err)
+  }
 
   if (!allowToggleSource) throw new Error('failed')
 
@@ -135,10 +147,8 @@ export const getMusicUrl = async ({
       onToggleSource,
       isRefresh,
     }).then(({ url, quality: targetQuality, musicInfo: targetMusicInfo, isFromCache }) => {
-      // saveLyric(musicInfo, data.lyricInfo)
       if (!isFromCache) void saveMusicUrl(targetMusicInfo, targetQuality, url)
-
-      // TODO: save url ?
+      // Note: URL is already saved via saveMusicUrl, no need to save again
       return url
     })
   })
@@ -171,7 +181,9 @@ export const getPicUrl = async ({
     return await getOnlineOtherSourcePicByLocal(musicInfo).then(({ url }) => {
       return url
     })
-  } catch {}
+  } catch (err) {
+    console.log('getPicUrl online source failed:', err)
+  }
 
   onToggleSource()
   return getOtherSourceByLocal(musicInfo, async (otherSource) => {
@@ -230,7 +242,9 @@ export const getLyricInfo = async ({
         return buildLyricInfo(lyricInfo)
       }
     )
-  } catch {}
+  } catch (err) {
+    console.log('getLyricInfo online source failed:', err)
+  }
 
   onToggleSource()
   return getOtherSourceByLocal(musicInfo, async (otherSource) => {

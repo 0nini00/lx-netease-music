@@ -6,7 +6,6 @@ import { type Source } from '@/store/songlist/state'
 
 export interface ListType {
   loadList: (source: Source, sortId: string, tagId: string) => void
-  onOpenDetail: (item: ListInfoItem) => void;
 }
 
 export default forwardRef<ListType, { onOpenDetail: (item: ListInfoItem) => void }>(({ onOpenDetail }, ref) => {

@@ -1,19 +1,11 @@
-import kw from './kw/index'
 import kg from './kg/index'
 import tx from './tx/index'
 import wy from './wy/index'
-import mg from './mg/index'
-import bd from './bd/index'
-import xm from './xm'
 import { supportQuality } from './api-source'
 
 
 const sources = {
   sources: [
-    {
-      name: '酷我音乐',
-      id: 'kw',
-    },
     {
       name: '酷狗音乐',
       id: 'kg',
@@ -26,26 +18,10 @@ const sources = {
       name: '网易音乐',
       id: 'wy',
     },
-    {
-      name: '咪咕音乐',
-      id: 'mg',
-    },
-    {
-      name: '虾米音乐',
-      id: 'xm',
-    },
-    // {
-    //   name: '百度音乐',
-    //   id: 'bd',
-    // },
   ],
-  kw,
   kg,
   tx,
   wy,
-  mg,
-  bd,
-  xm,
 }
 export default {
   ...sources,

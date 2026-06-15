@@ -368,6 +368,11 @@ export const getOnlineOtherSourceMusicUrl = async ({
     }
   }
 
+  // 所有音源和音质都尝试失败
+  if (musicInfos.length === 0) {
+    throw new Error(global.i18n.t('toggle_source_failed'))
+  }
+
   return getOnlineOtherSourceMusicUrl({
     musicInfos,
     quality,
@@ -381,74 +386,74 @@ export const getOnlineOtherSourceMusicUrl = async ({
 /**
  * 获取在线音乐URL
  */
-export const handleGetOnlineMusicUrl = async ({
-  musicInfo,
-  quality,
-  onToggleSource,
-  isRefresh,
-  allowToggleSource,
-}: {
-  musicInfo: LX.Music.MusicInfoOnline
-  quality?: LX.Quality
-  isRefresh: boolean
-  allowToggleSource: boolean
-  onToggleSource: (musicInfo?: LX.Music.MusicInfoOnline) => void
-}): Promise<{
-  url: string
-  musicInfo: LX.Music.MusicInfoOnline
-  quality: LX.Quality
-  isFromCache: boolean
-}> => {
-  if (!(await global.lx.apiInitPromise[0])) throw new Error('source init failed')
-  // console.log(musicInfo.source)
-  const targetQuality =
-    quality ?? getPlayQuality(settingState.setting['player.playQuality'], musicInfo)
-
-  if (isMusicApiGatewayEnabled()) {
-    const result = await getMusicApiGatewayUrl({
-      musicInfo,
-      quality: targetQuality,
-    })
-    return {
-      musicInfo,
-      url: result.url,
-      quality: result.quality,
-      isFromCache: false,
-    }
-  }
-
-  let reqPromise
-  try {
-    reqPromise = musicSdk[musicInfo.source].getMusicUrl(
-      toOldMusicInfo(musicInfo),
-      targetQuality
-    ).promise
-  } catch (err: any) {
-    reqPromise = Promise.reject(err)
-  }
-  return reqPromise
-    .then(({ url, type }: { url: string; type: LX.Quality }) => {
-      return { musicInfo, url, quality: type, isFromCache: false }
-    })
-    .catch(async (err: any) => {
-      if (!allowToggleSource || err.message == requestMsg.tooManyRequests) throw err
-      onToggleSource()
-
-      return getOtherSource(musicInfo).then((otherSource) => {
-        // console.log('find otherSource', otherSource.length)
-        if (otherSource.length) {
-          return getOnlineOtherSourceMusicUrl({
-            musicInfos: [...otherSource],
-            onToggleSource,
-            quality,
-            isRefresh,
-            retryedSource: [musicInfo.source],
-          })
-        }
-        throw err
-      })
-    })
-}
+export const handleGetOnlineMusicUrl = async ({
+  musicInfo,
+  quality,
+  onToggleSource,
+  isRefresh,
+  allowToggleSource,
+}: {
+  musicInfo: LX.Music.MusicInfoOnline
+  quality?: LX.Quality
+  isRefresh: boolean
+  allowToggleSource: boolean
+  onToggleSource: (musicInfo?: LX.Music.MusicInfoOnline) => void
+}): Promise<{
+  url: string
+  musicInfo: LX.Music.MusicInfoOnline
+  quality: LX.Quality
+  isFromCache: boolean
+}> => {
+  if (!(await global.lx.apiInitPromise[0])) throw new Error('source init failed')
+  // console.log(musicInfo.source)
+  const targetQuality =
+    quality ?? getPlayQuality(settingState.setting['player.playQuality'], musicInfo)
+
+  if (isMusicApiGatewayEnabled()) {
+    const result = await getMusicApiGatewayUrl({
+      musicInfo,
+      quality: targetQuality,
+    })
+    return {
+      musicInfo,
+      url: result.url,
+      quality: result.quality,
+      isFromCache: false,
+    }
+  }
+
+  let reqPromise
+  try {
+    reqPromise = musicSdk[musicInfo.source].getMusicUrl(
+      toOldMusicInfo(musicInfo),
+      targetQuality
+    ).promise
+  } catch (err: any) {
+    reqPromise = Promise.reject(err)
+  }
+  return reqPromise
+    .then(({ url, type }: { url: string; type: LX.Quality }) => {
+      return { musicInfo, url, quality: type, isFromCache: false }
+    })
+    .catch(async (err: any) => {
+      if (!allowToggleSource || err.message == requestMsg.tooManyRequests) throw err
+      onToggleSource()
+
+      return getOtherSource(musicInfo).then((otherSource) => {
+        // console.log('find otherSource', otherSource.length)
+        if (otherSource.length) {
+          return getOnlineOtherSourceMusicUrl({
+            musicInfos: [...otherSource],
+            onToggleSource,
+            quality,
+            isRefresh,
+            retryedSource: [musicInfo.source],
+          })
+        }
+        throw err
+      })
+    })
+}
 
 export const getOnlineOtherSourcePicUrl = async ({
   musicInfos,
@@ -486,7 +491,7 @@ export const getOnlineOtherSourcePicUrl = async ({
   if (musicInfo.meta.picUrl && !isRefresh)
     return { musicInfo, url: musicInfo.meta.picUrl, isFromCache: true }
 
-  let reqPromise
+  let reqPromise: any
   try {
     reqPromise = musicSdk[musicInfo.source].getPic(toOldMusicInfo(musicInfo))
   } catch (err: any) {
@@ -522,13 +527,13 @@ export const handleGetOnlinePicUrl = async ({
   isFromCache: boolean
 }> => {
   // console.log(musicInfo.source)
-  let reqPromise
+  let reqPromise: any
   try {
     reqPromise = musicSdk[musicInfo.source].getPic(toOldMusicInfo(musicInfo))
   } catch (err) {
     reqPromise = Promise.reject(err)
   }
-  return reqPromise
+  return (reqPromise as any)
     .then((url: string) => {
       return { musicInfo, url, isFromCache: false }
     })
@@ -590,10 +595,9 @@ export const getOnlineOtherSourceLyricInfo = async ({
     if (lyricInfo) return { musicInfo, lyricInfo, isFromCache: true }
   }
 
-  let reqPromise
+  let reqPromise: Promise<LX.Music.LyricInfo>
   try {
-    // TODO: remove any type
-    reqPromise = (musicSdk[musicInfo.source].getLyric(toOldMusicInfo(musicInfo)) as any).promise
+    reqPromise = musicSdk[musicInfo.source].getLyric(toOldMusicInfo(musicInfo)).promise
   } catch (err: any) {
     reqPromise = Promise.reject(err)
   }
@@ -633,10 +637,9 @@ export const handleGetOnlineLyricInfo = async ({
   isFromCache: boolean
 }> => {
   // console.log(musicInfo.source)
-  let reqPromise
+  let reqPromise: Promise<LX.Music.LyricInfo>
   try {
-    // TODO: remove any type
-    reqPromise = (musicSdk[musicInfo.source].getLyric(toOldMusicInfo(musicInfo)) as any).promise
+    reqPromise = musicSdk[musicInfo.source].getLyric(toOldMusicInfo(musicInfo)).promise
   } catch (err) {
     reqPromise = Promise.reject(err)
   }

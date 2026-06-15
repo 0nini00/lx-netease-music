@@ -60,13 +60,9 @@ import SettingSearch from './components/SettingSearch.vue'
 import SettingList from './components/SettingList.vue'
 import SettingDownload from './components/SettingDownload.vue'
 import SettingSync from './components/SettingSync/index.vue'
-import SettingOpenAPI from './components/SettingOpenAPI.vue'
 import SettingHotKey from './components/SettingHotKey.vue'
 import SettingNetwork from './components/SettingNetwork.vue'
-import SettingOdc from './components/SettingOdc.vue'
-import SettingBackup from './components/SettingBackup.vue'
 import SettingOther from './components/SettingOther.vue'
-import SettingUpdate from './components/SettingUpdate.vue'
 import SettingAbout from './components/SettingAbout.vue'
 
 export default {
@@ -80,13 +76,9 @@ export default {
     SettingList,
     SettingDownload,
     SettingSync,
-    SettingOpenAPI,
     SettingHotKey,
     SettingNetwork,
-    SettingOdc,
-    SettingBackup,
     SettingOther,
-    SettingUpdate,
     SettingAbout,
   },
   setup() {
@@ -106,12 +98,8 @@ export default {
         { id: 'SettingDownload', title: t('setting__download') },
         { id: 'SettingHotKey', title: t('setting__hot_key') },
         { id: 'SettingSync', title: t('setting__sync') },
-        { id: 'SettingOpenAPI', title: t('setting__open_api') },
         { id: 'SettingNetwork', title: t('setting__network') },
-        { id: 'SettingOdc', title: t('setting__odc') },
-        { id: 'SettingBackup', title: t('setting__backup') },
         { id: 'SettingOther', title: t('setting__other') },
-        { id: 'SettingUpdate', title: t('setting__update') },
         { id: 'SettingAbout', title: t('setting__about') },
       ]
     })

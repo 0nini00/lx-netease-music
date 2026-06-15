@@ -40,6 +40,8 @@ const initial = async ({
     handleAudioFocus: isHandleAudioFocus,
     audioOffload: isEnableAudioOffload,
     autoUpdateMetadata: false,
+    // 注意：react-native-track-player 可能不直接支持 gapless 参数
+    // 无缝播放主要通过预加载和合理的缓冲配置实现
   })
   global.lx.playerStatus.isInitialized = true
   global.lx.playerStatus.isIniting = false
@@ -69,3 +71,13 @@ export {
   initTrackInfo,
   updateOptions,
 } from './utils'
+
+export {
+  fadeOut,
+  fadeIn,
+  stopFade,
+  isCrossfadeEnabled,
+  getCrossfadeDuration,
+  isGaplessEnabled,
+} from './crossfade'
+

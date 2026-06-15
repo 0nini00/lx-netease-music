@@ -17,6 +17,11 @@ const defaultSetting: LX.AppSetting = {
   'common.wy_serpapi_key': '',
   'common.yt_cookie': '',
   'common.alwaysKeepStatusbarHeight': false,
+  'common.music_play_use_gateway': false,
+  'common.music_api_gateway_enable': false,
+  'common.music_api_gateway_url': '',
+  'common.music_api_gateway_header_name': '',
+  'common.music_api_gateway_header_value': '',
 
   'common.navStatus': {
     // 底部导航保留五个主入口
@@ -40,6 +45,9 @@ const defaultSetting: LX.AppSetting = {
   'player.isAutoCleanPlayedList': false,
   'player.isHandleAudioFocus': true,
   'player.isEnableAudioOffload': true,
+  'player.isCrossfadeEnabled': false,
+  'player.crossfadeDuration': 3,
+  'player.isGaplessEnabled': false,
   'player.isShowLyricTranslation': true,
   'player.isShowLyricRoma': false,
   'player.isShowNotificationImage': true,
@@ -59,7 +67,7 @@ const defaultSetting: LX.AppSetting = {
   'desktopLyric.isSingleLine': false,
   'desktopLyric.showToggleAnima': true,
   'desktopLyric.position.x': 0,
-  'desktopLyric.position.y': 0,
+  'desktopLyric.position.y': 100, // 默认顶部位置
   'desktopLyric.textPosition.x': 'center',
   'desktopLyric.textPosition.y': 'center',
   'desktopLyric.style.fontSize': 180,

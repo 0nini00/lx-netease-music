@@ -1,0 +1,243 @@
+diff --git a/mobile/src/components/player/PlayerBar/index.tsx b/mobile/src/components/player/PlayerBar/index.tsx
+index 1cea3cf..0ce08c3 100644
+--- a/mobile/src/components/player/PlayerBar/index.tsx
++++ b/mobile/src/components/player/PlayerBar/index.tsx
+@@ -114,7 +114,7 @@ export default memo(({ componentId, isHome = false }: { isHome?: boolean }) => {
+         </View>
+       </View>
+     ),
+-    [theme, isHome, handleShowPlaylist, panResponder.panHandlers, drawerLayoutPosition],
++    [theme, isHome, handleShowPlaylist, handleTimerEnd, handleNavigate, handleLongPress, panResponder.panHandlers, drawerLayoutPosition],
+   )
+ 
+   return (
+diff --git a/mobile/src/components/player/SleepTimerBtn.tsx b/mobile/src/components/player/SleepTimerBtn.tsx
+index 07027be..c017f93 100644
+--- a/mobile/src/components/player/SleepTimerBtn.tsx
++++ b/mobile/src/components/player/SleepTimerBtn.tsx
+@@ -28,20 +28,37 @@ export default ({ onTimerEnd }: Props) => {
+       if (isSleepTimerRunning()) {
+         const r = getSleepTimerRemaining()
+         setRemaining(r)
+-        if (r <= 0) {
++        // r === -1 means "end of track" mode
++        if (r === 0) {
+           onTimerEnd()
+           setRunning(false)
+           setVisible(false)
+           toast(t('sleep_timer_ended'))
+         }
++      } else if (running) {
++        // Timer stopped externally
++        setRunning(false)
++        setRemaining(0)
+       }
+     }, 1000)
+     return () => clearInterval(checkTick)
+-  }, [onTimerEnd])
++  }, [onTimerEnd, t, running])
+ 
+   const handleStart = useCallback((minutes: number) => {
+     setSelectedMinutes(minutes)
+     if (minutes === END_OF_TRACK) {
++      startSleepTimer(
++        -1,
++        undefined,
++        () => {
++          onTimerEnd()
++          setRunning(false)
++          toast(t('sleep_timer_ended'))
++        }
++      )
++      setRunning(true)
++      setRemaining(-1)
++      setVisible(false)
+       toast(t('sleep_timer_after_track'))
+       return
+     }
+@@ -58,7 +75,7 @@ export default ({ onTimerEnd }: Props) => {
+     setRemaining(minutes * 60 * 1000)
+     setVisible(false)
+     toast(t('sleep_timer_started') + ': ' + minutes + t('minute'))
+-  }, [onTimerEnd])
++  }, [onTimerEnd, t])
+ 
+   const handleStop = useCallback(() => {
+     stopSleepTimer()
+@@ -68,6 +85,7 @@ export default ({ onTimerEnd }: Props) => {
+   }, [])
+ 
+   const formatTime = (ms: number) => {
++    if (ms === -1) return '♪'
+     const mins = Math.floor(ms / 60000)
+     const secs = Math.floor((ms % 60000) / 1000)
+     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
+@@ -95,6 +113,12 @@ export default ({ onTimerEnd }: Props) => {
+                 <Text size={15}>{mins} {t('minute')}</Text>
+               </TouchableOpacity>
+             ))}
++            <TouchableOpacity
++              style={[styles.option, { borderBottomColor: 'rgba(128,128,128,0.15)' }]}
++              onPress={() => handleStart(END_OF_TRACK)}
++            >
++              <Text size={15}>{t('sleep_timer_after_track')}</Text>
++            </TouchableOpacity>
+             <TouchableOpacity
+               style={[styles.option, { borderBottomColor: 'rgba(128,128,128,0.15)' }]}
+               onPress={() => { setVisible(false); handleStop() }}
+diff --git a/mobile/src/core/localMusic.ts b/mobile/src/core/localMusic.ts
+index c85e339..a9331fa 100644
+--- a/mobile/src/core/localMusic.ts
++++ b/mobile/src/core/localMusic.ts
+@@ -37,7 +37,7 @@ export async function scanLocalFiles(directoryPath: string): Promise<LocalMusicI
+     for (const file of files) {
+       if (isAudioFile(file)) {
+         results.push({
+-          id: `local_${file}`,
++          id: `local_${file.replace(/[^a-zA-Z0-9]/g, '_')}`,
+           name: file.split('/').pop()?.replace(/\.[^/.]+$/, '') ?? file,
+           singer: 'Unknown',
+           albumName: '',
+diff --git a/mobile/src/core/search/album.ts b/mobile/src/core/search/album.ts
+index 22232b1..5740f8c 100644
+--- a/mobile/src/core/search/album.ts
++++ b/mobile/src/core/search/album.ts
+@@ -93,7 +93,11 @@ export const search = async (
+ 
+   const allResults = await Promise.all(tasks)
+   const merged = allResults.flat()
++  // Check again after async operation to prevent race condition
+   if (key != listInfo.key) return []
++  // Final check before setting state
++  const currentListInfo = searchAlbumState.listInfos.all!
++  if (currentListInfo.key !== key) return []
+   setSearchText(text)
+   setSource(sourceId)
+   return setListInfo(merged, page, text, sourceId)
+diff --git a/mobile/src/core/sleepTimer.ts b/mobile/src/core/sleepTimer.ts
+index 5bf49eb..6b1d0e0 100644
+--- a/mobile/src/core/sleepTimer.ts
++++ b/mobile/src/core/sleepTimer.ts
+@@ -1,8 +1,23 @@
+ let timerId: NodeJS.Timeout | null = null
+ let endTime = 0
++let endOfTrackMode = false
++let endOfTrackListener: (() => void) | null = null
+ 
+ export function startSleepTimer(minutes: number, onTick?: (remaining: number) => void, onEnd?: () => void): void {
+   stopSleepTimer()
++
++  // Special case: -1 means "end of current track"
++  if (minutes === -1) {
++    endOfTrackMode = true
++    endOfTrackListener = () => {
++      stopSleepTimer()
++      onEnd?.()
++    }
++    global.app_event?.on('playerEnded', endOfTrackListener)
++    return
++  }
++
++  endOfTrackMode = false
+   endTime = Date.now() + minutes * 60 * 1000
+   const tick = () => {
+     const remaining = Math.max(0, endTime - Date.now())
+@@ -22,14 +37,20 @@ export function stopSleepTimer(): void {
+     clearTimeout(timerId)
+     timerId = null
+   }
++  if (endOfTrackListener) {
++    global.app_event?.off('playerEnded', endOfTrackListener)
++    endOfTrackListener = null
++  }
+   endTime = 0
++  endOfTrackMode = false
+ }
+ 
+ export function getSleepTimerRemaining(): number {
++  if (endOfTrackMode) return -1
+   if (!endTime) return 0
+   return Math.max(0, endTime - Date.now())
+ }
+ 
+ export function isSleepTimerRunning(): boolean {
+-  return timerId !== null && endTime > 0
++  return (timerId !== null && endTime > 0) || endOfTrackMode
+ }
+\ No newline at end of file
+diff --git a/mobile/src/lang/en-us.json b/mobile/src/lang/en-us.json
+index 18ce207..b5fb473 100644
+--- a/mobile/src/lang/en-us.json
++++ b/mobile/src/lang/en-us.json
+@@ -609,5 +609,6 @@
+   "minute": "min",
+   "local_music": "Local Music",
+   "local_music_scan": "Scan Local Music",
+-  "local_music_no_files": "No local music files found"
++  "local_music_no_files": "No local music files found",
++  "play_failed": "Play failed"
+ }
+\ No newline at end of file
+diff --git a/mobile/src/lang/zh-cn.json b/mobile/src/lang/zh-cn.json
+index d71422a..d2f5252 100644
+--- a/mobile/src/lang/zh-cn.json
++++ b/mobile/src/lang/zh-cn.json
+@@ -613,5 +613,6 @@
+   "minute": "分钟",
+   "local_music": "本地音乐",
+   "local_music_scan": "扫描本地音乐",
+-  "local_music_no_files": "未找到本地音乐文件"
++  "local_music_no_files": "未找到本地音乐文件",
++  "play_failed": "播放失败"
+ }
+\ No newline at end of file
+diff --git a/mobile/src/screens/Home/Views/Search/AlbumList.tsx b/mobile/src/screens/Home/Views/Search/AlbumList.tsx
+index a229015..a6c8f32 100644
+--- a/mobile/src/screens/Home/Views/Search/AlbumList.tsx
++++ b/mobile/src/screens/Home/Views/Search/AlbumList.tsx
+@@ -16,6 +16,9 @@ import { search as searchAlbum, getAlbumDetail } from '@/core/search/album'
+ import type { AlbumResult } from '@/store/search/album/state'
+ import { scaleSizeW } from '@/utils/pixelRatio'
+ import { BorderWidths } from '@/theme'
++import { setTempList } from '@/core/list'
++import { playList } from '@/core/player/player'
++import { LIST_IDS } from '@/config/constant'
+ 
+ export interface AlbumListType {
+   loadList: (text: string, source: string) => void
+@@ -68,6 +71,17 @@ export default forwardRef<AlbumListType>((_, ref) => {
+     }
+   }
+ 
++  const handleSongPress = async (song: LX.Music.MusicInfoOnline, index: number) => {
++    if (!albumDetail?.list.length) return
++    try {
++      const listId = `album_${selectedAlbum?.source}_${selectedAlbum?.id}`
++      await setTempList(listId, albumDetail.list)
++      await playList(LIST_IDS.TEMP, index)
++    } catch (err: any) {
++      toast(err.message || t('play_failed'))
++    }
++  }
++
+   if (selectedAlbum) {
+     const songs = albumDetail?.list ?? []
+     return (
+@@ -96,10 +110,15 @@ export default forwardRef<AlbumListType>((_, ref) => {
+         ) : (
+           <ScrollView style={styles.detailContent}>
+             {songs.length ? songs.map((song, i) => (
+-              <View key={song.songmid ? `${song.songmid}_${i}` : `${i}`} style={styles.songItem}>
++              <TouchableOpacity
++                key={song.songmid ? `${song.songmid}_${i}` : `${i}`}
++                style={styles.songItem}
++                onPress={() => handleSongPress(song, i)}
++                activeOpacity={0.6}
++              >
+                 <Text size={14} numberOfLines={1}>{song.name}</Text>
+                 <Text size={11} color={theme['c-font']}>{song.singer} | {song.interval}</Text>
+-              </View>
++              </TouchableOpacity>
+             )) : (
+               <Text style={styles.emptyText} color={theme['c-font']}>{t('no_data')}</Text>
+             )}

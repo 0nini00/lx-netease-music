@@ -20,47 +20,16 @@ async function searchWySinger(text: string, page: number): Promise<SingerResult[
   const wy = musicSdk.wy
   if (!wy?.musicSearch) return []
   try {
-    const body = await (wy.musicSearch as any).musicSearch(text, page, 20)
-    const rawList = body?.data?.list ?? body?.result?.songs ?? []
+    const result = await (wy.musicSearch as any).searchSinger(text, page, 20)
+    const rawList = result?.list ?? []
     if (!rawList.length) return []
-    const singerMap = new Map<string, { id: string; name: string }>()
-    for (const item of rawList) {
-      const ar = item.ar || item.artists || []
-      for (const artist of ar) {
-        if (artist.name && String(artist.id)) {
-          const existing = singerMap.get(String(artist.id))
-          if (!existing) {
-            singerMap.set(String(artist.id), { id: String(artist.id), name: artist.name })
-          }
-        }
-      }
-    }
-    const seen = new Set<string>()
-    const results: SingerResult[] = []
-    for (const [, singer] of singerMap) {
-      if (seen.has(singer.id)) continue
-      seen.add(singer.id)
-      try {
-        const detail = await (wy.artist as any).getDetail(singer.id)
-        const artist = detail?.data?.artist ?? detail?.artist ?? {}
-        results.push({
-          id: singer.id,
-          name: artist.name || singer.name,
-          picUrl: artist.picUrl || artist.img1v1Url || artist.cover || null,
-          desc: artist.briefDesc || '',
-          source: 'wy',
-        })
-      } catch {
-        results.push({
-          id: singer.id,
-          name: singer.name,
-          picUrl: null,
-          desc: '',
-          source: 'wy',
-        })
-      }
-    }
-    return results
+    return rawList.map((item: any) => ({
+      id: String(item.id),
+      name: item.name,
+      picUrl: item.picUrl || null,
+      desc: item.alias?.length ? item.alias.join('、') : '',
+      source: 'wy' as LX.OnlineSource,
+    }))
   } catch (err) {
     console.log('wy singer search failed:', err)
     return []
@@ -134,7 +103,11 @@ export const search = async (
 
   const allResults = await Promise.all(tasks)
   const merged = allResults.flat()
+  // Check again after async operation to prevent race condition
   if (key != listInfo.key) return []
+  // Final check before setting state
+  const currentListInfo = searchSingerState.listInfos.all!
+  if (currentListInfo.key !== key) return []
   setSearchText(text)
   setSource(sourceId)
   return setListInfo(merged, page, text, sourceId)
@@ -148,32 +121,41 @@ export async function getSingerDetail(
   if (source === 'wy') {
     const wy = musicSdk.wy
     const [songsRes, albumsRes] = await Promise.all([
-      (wy?.artist as any)?.getSongs(singerId, 'time', 30, (page - 1) * 30) ?? { list: [], total: 0, hasMore: false },
-      (wy?.artist as any)?.getAlbums(singerId, 20, 0) ?? { hotAlbums: [], hasMore: false },
+      (wy?.artist as any)?.getSongs(singerId, 'time', 500, (page - 1) * 500) ?? { list: [], total: 0, hasMore: false },
+      (wy?.artist as any)?.getAlbums(singerId, 100, 0) ?? { hotAlbums: [], hasMore: false },
     ])
     return {
       songs: songsRes.list || [],
       total: songsRes.total || 0,
       hasMore: songsRes.hasMore ?? false,
       albums: (albumsRes.hotAlbums || []).map((a: any) => ({
-        id: a.id,
+        id: String(a.id),
         name: a.name,
         picUrl: a.picUrl || '',
         publishTime: a.publishTime || 0,
         size: a.size || 0,
+        source: 'wy' as LX.OnlineSource,
       })),
       albumHasMore: albumsRes.hasMore ?? false,
     }
   } else if (source === 'kg') {
     const kg = musicSdk.kg
-    const [songsRes] = await Promise.all([
-      (kg?.singer as any)?.getSingerSongList(singerId, page, 30) ?? { list: [], total: 0, allPage: 1 },
+    const [songsRes, albumsRes] = await Promise.all([
+      (kg?.singer as any)?.getSingerSongList(singerId, page, 500) ?? { list: [], total: 0, allPage: 1 },
+      (kg?.singer as any)?.getSingerAlbumList(singerId, 1, 100) ?? { albums: [] },
     ])
     return {
       songs: songsRes.list || [],
       total: songsRes.total || 0,
       hasMore: page < (songsRes.allPage || 1),
-      albums: [],
+      albums: (albumsRes.albums || []).map((a: any) => ({
+        id: a.album_id,
+        name: a.name,
+        picUrl: a.img || '',
+        publishTime: a.publishTime ? new Date(a.publishTime).getTime() : 0,
+        size: 0,
+        source: 'kg' as LX.OnlineSource,
+      })),
       albumHasMore: false,
     }
   }

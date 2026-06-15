@@ -8,7 +8,7 @@ import StatusBar from '@/components/common/StatusBar'
 import { useI18n } from '@/lang'
 import { createStyle } from '@/utils/tools'
 import Text from '@/components/common/Text'
-import { HEADER_HEIGHT as _HEADER_HEIGHT } from '@/config/constant'
+import { HEADER_HEIGHT as _HEADER_HEIGHT, COMPONENT_IDS } from '@/config/constant'
 import { scaleSizeH } from '@/utils/pixelRatio'
 import commonState from '@/store/common/state'
 import { useStatusbarHeight } from '@/store/common/hook'
@@ -20,7 +20,8 @@ export default memo(({ musicInfo }: { musicInfo: LX.Music.MusicInfo }) => {
   const statusBarHeight = useStatusbarHeight()
 
   const back = () => {
-    void pop(commonState.componentIds.comment!)
+    const id = commonState.componentIds.find(item => item.name === COMPONENT_IDS.comment)?.id
+    if (id) void pop(id)
   }
 
   return (

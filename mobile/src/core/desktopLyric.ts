@@ -40,12 +40,11 @@ export const showDesktopLyric = async () => {
   // 如果歌词位置是初始的 (0,0)，则自动计算并设置为顶部居中
   if (positionX === 0 && positionY === 0) {
     const { width: screenWidth, height: screenHeight } = windowSizeTools.getSize();
-    const lyricWidthPercent = 100;
     const lyricWidth = screenWidth;
 
-    // 计算居中的 x 坐标
+    // 计算居中的 x 坐标和顶部 y 坐标
     positionX = (screenWidth - lyricWidth) / 2;
-    positionY = screenHeight * 0.15;
+    positionY = 100; // 设置为顶部，距离顶部100像素
 
     updateSetting({
       'desktopLyric.position.x': positionX,

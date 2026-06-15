@@ -328,6 +328,11 @@ export const getOnlineOtherSourceMusicUrl = async({ musicInfos, quality, onToggl
     }
   }
 
+  // 所有音源和音质都尝试失败
+  if (musicInfos.length === 0) {
+    throw new Error(window.i18n.t('toggle_source_failed'))
+  }
+
   return getOnlineOtherSourceMusicUrl({ musicInfos, quality, onToggleSource, isRefresh, retryedSource })
 }
 
