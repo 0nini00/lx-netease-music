@@ -369,7 +369,7 @@ Windows 7 未开启 Aero 效果时桌面歌词会有问题，详情看上面的 
 以下是目前可用的Scheme URL调用方式：
 
 - URL统一以`lxmusic://`开头
-- 若无特别说明，源的可用值为：`kw/kg/tx/wy/mg`
+- 若无特别说明，源的可用值为：`wy/tx/kg`
 - 若无特别说明，音质的可用值为：`128k/320k/flac/flac24bit`
 
 目前支持两种传参方式：
@@ -394,8 +394,8 @@ Windows 7 未开启 Aero 效果时桌面歌词会有问题，详情看上面的 
 
 | 描述 | URL | 参数
 | --- | --- | ---
-| 搜索歌曲 | `music/search/{source}/{keywords}` | `source`（源，可选）<br>`keywords`（要搜索的内容，必须）<br>例：`music/search/kw/xxx`、`music/search/xxx`
-| 打开歌单 | `songlist/open/{source}/{id/url}` | `source`（源，必须）<br>`id/url`（歌单ID或歌单URL，必须）<br>例：`songlist/open/kw/123456`
+| 搜索歌曲 | `music/search/{source}/{keywords}` | `source`（源，可选）<br>`keywords`（要搜索的内容，必须）<br>例：`music/search/wy/xxx`、`music/search/xxx`
+| 打开歌单 | `songlist/open/{source}/{id/url}` | `source`（源，必须）<br>`id/url`（歌单ID或歌单URL，必须）<br>例：`songlist/open/wy/123456`
 
 ## 自定义源脚本编写说明
 
@@ -461,7 +461,7 @@ send(EVENT_NAMES.inited, {
   status: true, // 初始化成功 or 失败
   openDevTools: false, // 是否打开开发者工具，方便用于调试脚本
   sources: { // 当前脚本支持的源
-    kw: { // 支持的源对象，可用key值：kw/kg/tx/wy/mg
+    kw: { // 支持的源对象，可用key值：wy/tx/kg
       name: '酷我音乐',
       type: 'music',  // 目前固定为 music
       actions: ['musicUrl'], // 目前固定为 ['musicUrl']

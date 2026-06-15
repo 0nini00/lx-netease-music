@@ -1,4 +1,4 @@
-﻿# LX Netease Music
+# LX Netease Music
 
 基于 [lyswhut/lx-music-desktop](https://github.com/lyswhut/lx-music-desktop) 和 [souvenp/lx-netease-music-mobile](https://github.com/souvenp/lx-netease-music-mobile) 的多平台音乐播放器。
 
@@ -25,12 +25,12 @@ lx-netease-music/
 - 下载管理
 - 桌面歌词
 
-### 音乐源
+### 内置音乐源
 - 网易云音乐 (wy)
+- QQ 音乐 (tx)
 - 酷狗音乐 (kg)
-- 酷我音乐 (kw)
-- 咪咕音乐 (mg)
-- 千千音乐 (tx)
+
+> 其他音源可通过「自定义音源脚本」导入。
 
 ### 开发运行
 ```bash
@@ -64,13 +64,12 @@ npm run pack:win:setup:x64       # Windows 安装包
 - WebDAV 同步
 - 桌面歌词
 
-### 音乐源
+### 内置音乐源
 - 网易云音乐 (wy)
+- QQ 音乐 (tx)
 - 酷狗音乐 (kg)
-- 酷我音乐 (kw)
-- 咪咕音乐 (mg)
-- 千千音乐 (tx)
-- YouTube（需配置）
+
+> 其他音源可通过「自定义音源脚本」导入。
 
 ### 开发运行
 ```bash
